@@ -6,6 +6,8 @@ public class SubjectDTO {
 	private long subjectId;
 	private String subjectCode;
 	private CourseDTO courseDTO;
+	private DivisionDTO divisionDTO;
+	private ClassDTO classDTO;
 	private String subjectName;
 	private String rules;
 	private long totalMarks;
@@ -44,6 +46,22 @@ public class SubjectDTO {
 
 	public void setCourseDTO(CourseDTO courseDTO) {
 		this.courseDTO = courseDTO;
+	}
+
+	public DivisionDTO getDivisionDTO() {
+		return divisionDTO;
+	}
+
+	public void setDivisionDTO(DivisionDTO divisionDTO) {
+		this.divisionDTO = divisionDTO;
+	}
+
+	public ClassDTO getClassDTO() {
+		return classDTO;
+	}
+
+	public void setClassDTO(ClassDTO classDTO) {
+		this.classDTO = classDTO;
 	}
 
 	public String getSubjectName() {
@@ -113,6 +131,10 @@ public class SubjectDTO {
 		builder.append(subjectCode);
 		builder.append(", courseDTO=");
 		builder.append(courseDTO);
+		builder.append(", divisionDTO=");
+		builder.append(divisionDTO);
+		builder.append(", classDTO=");
+		builder.append(classDTO);
 		builder.append(", subjectName=");
 		builder.append(subjectName);
 		builder.append(", rules=");

@@ -7,6 +7,7 @@ public class DivisionModifyDTO {
 	private long divisionId;
 	private String divisionName;
 	private String divisionDescription;
+	private long courseId;
 	private long userId;
 	private LocalDateTime dateTime;
 
@@ -34,6 +35,14 @@ public class DivisionModifyDTO {
 		this.divisionDescription = divisionDescription;
 	}
 
+	public long getCourseId() {
+		return courseId;
+	}
+
+	public void setCourseId(long courseId) {
+		this.courseId = courseId;
+	}
+
 	public long getUserId() {
 		return userId;
 	}
@@ -59,6 +68,8 @@ public class DivisionModifyDTO {
 		builder.append(divisionName);
 		builder.append(", divisionDescription=");
 		builder.append(divisionDescription);
+		builder.append(", courseId=");
+		builder.append(courseId);
 		builder.append(", userId=");
 		builder.append(userId);
 		builder.append(", dateTime=");

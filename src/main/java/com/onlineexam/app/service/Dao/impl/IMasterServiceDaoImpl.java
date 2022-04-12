@@ -51,8 +51,7 @@ import com.onlineexam.app.utils.CommonUtility;
 
 @Repository("masterServiceDaoImpl")
 public class IMasterServiceDaoImpl implements IMasterServiceDao {
-	
-	
+
 	@Autowired
 	JdbcTemplate jdbcTemplate;
 	@Autowired
@@ -138,7 +137,6 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 	}
 
 	@Override
-	@Cacheable(value = "allRolesAuth")
 	public List<RoleAuthFetctDTO> fetchRoleAuthByRoleId(int roleId) {
 		String query = env.getProperty("fetchRoleAuthByRoleQuery");
 		return jdbcTemplate.query(query, new Object[] { roleId }, new int[] { Types.BIGINT },
@@ -164,7 +162,6 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 	}
 
 	@Override
-	@CacheEvict(value = "allRolesAuth", allEntries = true)
 	public int[] updateRoleAuth(List<RoleAuthModifyDTO> roleAuthModifyDTOList) {
 		String query = env.getProperty("roleAuthUpdateQuery");
 		return jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
@@ -189,7 +186,6 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 	}
 
 	@Override
-	@CacheEvict(value = "allRolesAuth", allEntries = true)
 	public int[] createRoleAuth(List<RoleAuthCreateDTO> roleAuthCreateDTODTOList) {
 		String query = env.getProperty("roleAuthCreateQuery");
 		return jdbcTemplate.batchUpdate(query, new BatchPreparedStatementSetter() {
@@ -230,6 +226,16 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 				CourseDTO courseDTO = new CourseDTO();
 				courseDTO.setCourseId(rs.getLong("course_id"));
 				courseDTO.setCourseName(rs.getString("course_name"));
+				DivisionDTO divisionDTO = new DivisionDTO();
+				divisionDTO.setDivisionId(rs.getLong("division_id"));
+				divisionDTO.setDivisionName(rs.getString("division_name"));
+				divisionDTO.setCourseDTO(courseDTO);
+				subjectDTO.setDivisionDTO(divisionDTO);
+				ClassDTO classDTO = new ClassDTO();
+				classDTO.setClassId(rs.getLong("class_id"));
+				classDTO.setClassName(rs.getString("class_name"));
+				classDTO.setDivisionDTO(divisionDTO);
+				subjectDTO.setClassDTO(classDTO);
 				subjectDTO.setCourseDTO(courseDTO);
 				subjectDTO.setSubjectId(rs.getInt("subject_id"));
 				subjectDTO.setSubjectName(rs.getString("subject_name"));
@@ -289,11 +295,10 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 	@CacheEvict(value = "allSubjects", allEntries = true)
 	public int saveSubject(SubjectCreateDTO subjectCreateDTO) throws SQLException {
 		String saveSubjectMasterQuery = env.getProperty("saveSubjectQuery");
-		return jdbcTemplate.update(saveSubjectMasterQuery,
-				new Object[] { subjectCreateDTO.getSubjectCode(), subjectCreateDTO.getCourseId(),
-						subjectCreateDTO.getSubjectName(), subjectCreateDTO.getRules(),
-						subjectCreateDTO.getTotalMarks(), subjectCreateDTO.getPassMarks(),
-						subjectCreateDTO.getExamDuration(), subjectCreateDTO.getUserId() });
+		return jdbcTemplate.update(saveSubjectMasterQuery, new Object[] { subjectCreateDTO.getSubjectCode(),
+				subjectCreateDTO.getCourseId(), subjectCreateDTO.getDivisionId(), subjectCreateDTO.getClassId(),
+				subjectCreateDTO.getSubjectName(), subjectCreateDTO.getRules(), subjectCreateDTO.getTotalMarks(),
+				subjectCreateDTO.getPassMarks(), subjectCreateDTO.getExamDuration(), subjectCreateDTO.getUserId() });
 	}
 
 	@Override
@@ -301,9 +306,10 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 	public int updateSubject(SubjectModifyDTO subjectModifyDTO) throws SQLException {
 		String updateSubjectMasterQuery = env.getProperty("updateSubjectQuery");
 		return jdbcTemplate.update(updateSubjectMasterQuery, subjectModifyDTO.getSubjectCode(),
-				subjectModifyDTO.getCourseId(), subjectModifyDTO.getSubjectName(), subjectModifyDTO.getRules(),
-				subjectModifyDTO.getTotalMarks(), subjectModifyDTO.getPassMarks(), subjectModifyDTO.getExamDuration(),
-				subjectModifyDTO.getUserId(), CommonUtility.getCurrentDateTime(), subjectModifyDTO.getSubjectId());
+				subjectModifyDTO.getCourseId(), subjectModifyDTO.getDivisionId(), subjectModifyDTO.getClassId(),
+				subjectModifyDTO.getSubjectName(), subjectModifyDTO.getRules(), subjectModifyDTO.getTotalMarks(),
+				subjectModifyDTO.getPassMarks(), subjectModifyDTO.getExamDuration(), subjectModifyDTO.getUserId(),
+				CommonUtility.getCurrentDateTime(), subjectModifyDTO.getSubjectId());
 	}
 
 	@Override
@@ -400,20 +406,33 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 	}
 
 	@Override
-	public List<DivisionDTO> getAllDivision(int pageIndex, int totalRecords) {
-		String query = "";
-		if (pageIndex == 0 && totalRecords == 0)
-			query = env.getProperty("fetchDivisionMasterQuery") + " where cm.active_status=1";
-		else
-			query = env.getProperty("fetchDivisionMasterQuery") + "  limit " + (pageIndex * totalRecords) + " , "
-					+ totalRecords;
-		return jdbcTemplate.query(query, new RowMapper<DivisionDTO>() {
+	public List<DivisionDTO> getAllDivision(int pageIndex, int totalRecords, Map<String, String> filters) {
+		StringBuilder query = new StringBuilder();
+		if (filters == null) {
+			if (pageIndex == 0 && totalRecords == 0)
+				query.append(env.getProperty("fetchDivisionMasterQuery")).append(" where dm.active_status=1");
+			else
+				query.append(env.getProperty("fetchDivisionMasterQuery"))
+						.append("  limit " + (pageIndex * totalRecords) + " , ").append(totalRecords);
+		} else {
+			query.append(env.getProperty("fetchDivisionMasterQuery")).append(" where dm.active_status=1 ");
+			filters.forEach((key, value) -> {
+				if (key.equals("courseId")) {
+					query.append(" and dm.course_id =").append(value);
+				}
+			});
+		}
+		return jdbcTemplate.query(query.toString(), new RowMapper<DivisionDTO>() {
 			@Override
 			public DivisionDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 				DivisionDTO divisionDTO = new DivisionDTO();
 				divisionDTO.setDivisionId(rs.getLong("division_id"));
 				divisionDTO.setDivisionName(rs.getString("division_name"));
 				divisionDTO.setDivisionDescription(rs.getString("division_description"));
+				CourseDTO courseDTO = new CourseDTO();
+				courseDTO.setCourseId(rs.getLong("course_id"));
+				courseDTO.setCourseName(rs.getString("course_name"));
+				divisionDTO.setCourseDTO(courseDTO);
 				divisionDTO.setActiveStatus(rs.getInt("active_status"));
 				divisionDTO.setUserName(rs.getString("user_name"));
 				return divisionDTO;
@@ -433,6 +452,10 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 				divisionDTO.setDivisionId(rs.getLong("division_id"));
 				divisionDTO.setDivisionName(rs.getString("division_name"));
 				divisionDTO.setDivisionDescription(rs.getString("division_description"));
+				CourseDTO courseDTO = new CourseDTO();
+				courseDTO.setCourseId(rs.getLong("course_id"));
+				courseDTO.setCourseName(rs.getString("course_name"));
+				divisionDTO.setCourseDTO(courseDTO);
 				divisionDTO.setActiveStatus(rs.getInt("active_status"));
 				divisionDTO.setUserName(rs.getString("user_name"));
 				return divisionDTO;
@@ -457,8 +480,9 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 	@CacheEvict(value = "allDivisions", allEntries = true)
 	public int saveDivision(DivisionCreateDTO divisionCreateDTO) throws SQLException {
 		String saveCourseMasterQuery = env.getProperty("saveDivisionQuery");
-		return jdbcTemplate.update(saveCourseMasterQuery, new Object[] { divisionCreateDTO.getDivisionName(),
-				divisionCreateDTO.getDivisionDescription(), divisionCreateDTO.getUserId() });
+		return jdbcTemplate.update(saveCourseMasterQuery,
+				new Object[] { divisionCreateDTO.getDivisionName(), divisionCreateDTO.getDivisionDescription(),
+						divisionCreateDTO.getCourseId(), divisionCreateDTO.getUserId() });
 	}
 
 	@Override
@@ -466,8 +490,8 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 	public int updateDivision(DivisionModifyDTO divisionModifyDTO) throws SQLException {
 		String updateCourseMasterQuery = env.getProperty("updateDivisionQuery");
 		return jdbcTemplate.update(updateCourseMasterQuery, divisionModifyDTO.getDivisionName(),
-				divisionModifyDTO.getDivisionDescription(), divisionModifyDTO.getUserId(),
-				CommonUtility.getCurrentDateTime(), divisionModifyDTO.getDivisionId());
+				divisionModifyDTO.getDivisionDescription(), divisionModifyDTO.getCourseId(),
+				divisionModifyDTO.getUserId(), CommonUtility.getCurrentDateTime(), divisionModifyDTO.getDivisionId());
 	}
 
 	@Override
@@ -479,20 +503,39 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 	}
 
 	@Override
-	public List<ClassDTO> getAllClass(int pageIndex, int totalRecords) {
-		String query = "";
-		if (pageIndex == 0 && totalRecords == 0)
-			query = env.getProperty("fetchClassMasterQuery") + " where cm.active_status=1";
-		else
-			query = env.getProperty("fetchClassMasterQuery") + "  limit " + (pageIndex * totalRecords) + " , "
-					+ totalRecords;
-		return jdbcTemplate.query(query, new RowMapper<ClassDTO>() {
+	public List<ClassDTO> getAllClass(int pageIndex, int totalRecords, Map<String, String> filters)
+			throws SQLException {
+		StringBuilder query = new StringBuilder();
+		if (filters == null) {
+			if (pageIndex == 0 && totalRecords == 0)
+				query.append(env.getProperty("fetchClassMasterQuery")).append(" where cm.active_status=1");
+			else
+				query.append(env.getProperty("fetchClassMasterQuery"))
+						.append("  limit " + (pageIndex * totalRecords) + " , ").append(totalRecords);
+		} else {
+			query.append(env.getProperty("fetchClassMasterQuery")).append(" where cm.active_status=1 ");
+			filters.forEach((key, value) -> {
+				if (key.equals("divisionId")) {
+					query.append(" and cm.division_id =").append(value);
+				}
+			});
+		}
+		return jdbcTemplate.query(query.toString(), new RowMapper<ClassDTO>() {
 			@Override
 			public ClassDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 				ClassDTO classDTO = new ClassDTO();
 				classDTO.setClassId(rs.getLong("class_id"));
 				classDTO.setClassName(rs.getString("class_name"));
 				classDTO.setClassDescription(rs.getString("class_description"));
+				CourseDTO courseDTO = new CourseDTO();
+				courseDTO.setCourseId(rs.getLong("course_id"));
+				courseDTO.setCourseName(rs.getString("course_name"));
+				DivisionDTO divisionDTO = new DivisionDTO();
+				divisionDTO.setDivisionId(rs.getLong("division_id"));
+				divisionDTO.setDivisionName(rs.getString("division_name"));
+				divisionDTO.setCourseDTO(courseDTO);
+				classDTO.setCourseDTO(courseDTO);
+				classDTO.setDivisionDTO(divisionDTO);
 				classDTO.setActiveStatus(rs.getInt("active_status"));
 				classDTO.setUserName(rs.getString("user_name"));
 				return classDTO;
@@ -512,6 +555,15 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 				classDTO.setClassId(rs.getLong("class_id"));
 				classDTO.setClassName(rs.getString("class_name"));
 				classDTO.setClassDescription(rs.getString("class_description"));
+				CourseDTO courseDTO = new CourseDTO();
+				courseDTO.setCourseId(rs.getLong("course_id"));
+				courseDTO.setCourseName(rs.getString("course_name"));
+				DivisionDTO divisionDTO = new DivisionDTO();
+				divisionDTO.setDivisionId(rs.getLong("division_id"));
+				divisionDTO.setDivisionName(rs.getString("division_name"));
+				divisionDTO.setCourseDTO(courseDTO);
+				classDTO.setCourseDTO(courseDTO);
+				classDTO.setDivisionDTO(divisionDTO);
 				classDTO.setActiveStatus(rs.getInt("active_status"));
 				classDTO.setUserName(rs.getString("user_name"));
 				return classDTO;
@@ -530,8 +582,9 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 	@CacheEvict(value = "allClasses", allEntries = true)
 	public int saveClass(ClassCreateDTO classCreateDTO) throws SQLException {
 		String saveClassMasterQuery = env.getProperty("saveClassQuery");
-		return jdbcTemplate.update(saveClassMasterQuery, new Object[] { classCreateDTO.getClassName(),
-				classCreateDTO.getClassDescription(), classCreateDTO.getUserId() });
+		return jdbcTemplate.update(saveClassMasterQuery,
+				new Object[] { classCreateDTO.getClassName(), classCreateDTO.getClassDescription(),
+						classCreateDTO.getCourseId(), classCreateDTO.getDivisionId(), classCreateDTO.getUserId() });
 	}
 
 	@Override
@@ -539,8 +592,8 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 	public int updateClass(ClassModifyDTO classModifyDTO) throws SQLException {
 		String updateClassMasterQuery = env.getProperty("updateClassQuery");
 		return jdbcTemplate.update(updateClassMasterQuery, classModifyDTO.getClassName(),
-				classModifyDTO.getClassDescription(), classModifyDTO.getUserId(), CommonUtility.getCurrentDateTime(),
-				classModifyDTO.getClassId());
+				classModifyDTO.getClassDescription(), classModifyDTO.getCourseId(), classModifyDTO.getDivisionId(),
+				classModifyDTO.getUserId(), CommonUtility.getCurrentDateTime(), classModifyDTO.getClassId());
 	}
 
 	@Override

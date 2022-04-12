@@ -53,7 +53,7 @@ import com.onlineexam.app.service.Dao.IMasterServiceDao;
 
 @Service("IMasterServiceImpl")
 public class MasterServiceImpl implements IMasterService {
-	
+
 	@Autowired
 	private IMasterServiceDao iMasterServiceDao;
 	private static final Logger LOGGER = LoggerFactory.getLogger(MasterServiceImpl.class);
@@ -650,7 +650,42 @@ public class MasterServiceImpl implements IMasterService {
 		Integer count = 0;
 		int slNo[] = { 0 };
 		try {
-			dataList = iMasterServiceDao.getAllDivision(pageIndex, totalNumberOfRecords);
+			dataList = iMasterServiceDao.getAllDivision(pageIndex, totalNumberOfRecords, null);
+			if (dataList != null && dataList.size() > 0) {
+				dataList.forEach(item -> {
+					slNo[0]++;
+					item.setSno(slNo[0]);
+				});
+			}
+			count = iMasterServiceDao.getTotalDivisionCount();
+			customReponseStatus = new CustomReponseStatus(StatusMaster.SUCCESS.getResponseCode(),
+					StatusMaster.SUCCESS.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+			response.put(ResponseKeyValue.DIVISION_MASTER_DATA_KEY.key(), dataList);
+			response.put(ResponseKeyValue.DIVISION_MASTER_ALL_DATA_COUNT_KEY.key(), count);
+		} catch (Exception ex) {
+			LOGGER.error("Exception Occur in getAllDivisions {}", ex.getMessage());
+			customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+					StatusMaster.FAILED.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+		} finally {
+			serviceResponse.setServiceResponse(response);
+		}
+		return serviceResponse;
+	}
+
+	@Override
+	public ServiceResponseDTO getAllDivisionsByFilter(Map<String, String> filters, int pageIndex,
+			int totalNumberOfRecords) {
+		LOGGER.info("Executing  getAllDivisionsByFilter() method of ServiceResponseDTO");
+		LinkedHashMap<Object, Object> response = new LinkedHashMap<>();
+		ServiceResponseDTO serviceResponse = new ServiceResponseDTO();
+		CustomReponseStatus customReponseStatus = null;
+		List<DivisionDTO> dataList = null;
+		Integer count = 0;
+		int slNo[] = { 0 };
+		try {
+			dataList = iMasterServiceDao.getAllDivision(pageIndex, totalNumberOfRecords, filters);
 			if (dataList != null && dataList.size() > 0) {
 				dataList.forEach(item -> {
 					slNo[0]++;
@@ -790,7 +825,42 @@ public class MasterServiceImpl implements IMasterService {
 		Integer count = 0;
 		int slNo[] = { 0 };
 		try {
-			dataList = iMasterServiceDao.getAllClass(pageIndex, totalNumberOfRecords);
+			dataList = iMasterServiceDao.getAllClass(pageIndex, totalNumberOfRecords, null);
+			if (dataList != null && dataList.size() > 0) {
+				dataList.forEach(item -> {
+					slNo[0]++;
+					item.setSno(slNo[0]);
+				});
+			}
+			count = iMasterServiceDao.getTotalClassCount();
+			customReponseStatus = new CustomReponseStatus(StatusMaster.SUCCESS.getResponseCode(),
+					StatusMaster.SUCCESS.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+			response.put(ResponseKeyValue.CLASS_MASTER_DATA_KEY.key(), dataList);
+			response.put(ResponseKeyValue.CLASS_MASTER_ALL_DATA_COUNT_KEY.key(), count);
+		} catch (Exception ex) {
+			LOGGER.error("Exception Occur in getAllClasses {}", ex.getMessage());
+			customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+					StatusMaster.FAILED.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+		} finally {
+			serviceResponse.setServiceResponse(response);
+		}
+		return serviceResponse;
+	}
+
+	@Override
+	public ServiceResponseDTO getAllClassesByFilter(Map<String, String> filters, int pageIndex,
+			int totalNumberOfRecords) {
+		LOGGER.info("Executing  getAllClassesByFilter() method of ServiceResponseDTO");
+		LinkedHashMap<Object, Object> response = new LinkedHashMap<>();
+		ServiceResponseDTO serviceResponse = new ServiceResponseDTO();
+		CustomReponseStatus customReponseStatus = null;
+		List<ClassDTO> dataList = null;
+		Integer count = 0;
+		int slNo[] = { 0 };
+		try {
+			dataList = iMasterServiceDao.getAllClass(pageIndex, totalNumberOfRecords, filters);
 			if (dataList != null && dataList.size() > 0) {
 				dataList.forEach(item -> {
 					slNo[0]++;

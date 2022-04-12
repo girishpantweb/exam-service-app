@@ -7,6 +7,8 @@ public class SubjectModifyDTO {
 	private long subjectId;
 	private String subjectCode;
 	private int courseId;
+	private long divisionId;
+	private long classId;
 	private String subjectName;
 	private String rules;
 	private int totalMarks;
@@ -37,6 +39,22 @@ public class SubjectModifyDTO {
 
 	public void setCourseId(int courseId) {
 		this.courseId = courseId;
+	}
+
+	public long getDivisionId() {
+		return divisionId;
+	}
+
+	public void setDivisionId(long divisionId) {
+		this.divisionId = divisionId;
+	}
+
+	public long getClassId() {
+		return classId;
+	}
+
+	public void setClassId(long classId) {
+		this.classId = classId;
 	}
 
 	public String getSubjectName() {
@@ -104,6 +122,10 @@ public class SubjectModifyDTO {
 		builder.append(subjectCode);
 		builder.append(", courseId=");
 		builder.append(courseId);
+		builder.append(", divisionId=");
+		builder.append(divisionId);
+		builder.append(", classId=");
+		builder.append(classId);
 		builder.append(", subjectName=");
 		builder.append(subjectName);
 		builder.append(", rules=");
@@ -121,5 +143,4 @@ public class SubjectModifyDTO {
 		builder.append("]");
 		return builder.toString();
 	}
-
 }

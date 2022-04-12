@@ -6,6 +6,8 @@ public class ClassDTO {
 	private long classId;
 	private String className;
 	private String classDescription;
+	private CourseDTO courseDTO;
+	private DivisionDTO divisionDTO;
 	private String userName;
 	private int activeStatus;
 
@@ -41,6 +43,22 @@ public class ClassDTO {
 		this.classDescription = classDescription;
 	}
 
+	public CourseDTO getCourseDTO() {
+		return courseDTO;
+	}
+
+	public void setCourseDTO(CourseDTO courseDTO) {
+		this.courseDTO = courseDTO;
+	}
+
+	public DivisionDTO getDivisionDTO() {
+		return divisionDTO;
+	}
+
+	public void setDivisionDTO(DivisionDTO divisionDTO) {
+		this.divisionDTO = divisionDTO;
+	}
+
 	public String getUserName() {
 		return userName;
 	}
@@ -68,6 +86,10 @@ public class ClassDTO {
 		builder.append(className);
 		builder.append(", classDescription=");
 		builder.append(classDescription);
+		builder.append(", courseDTO=");
+		builder.append(courseDTO);
+		builder.append(", divisionDTO=");
+		builder.append(divisionDTO);
 		builder.append(", userName=");
 		builder.append(userName);
 		builder.append(", activeStatus=");
@@ -75,5 +97,4 @@ public class ClassDTO {
 		builder.append("]");
 		return builder.toString();
 	}
-
 }

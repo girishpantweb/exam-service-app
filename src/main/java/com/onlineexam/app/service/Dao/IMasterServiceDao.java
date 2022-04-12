@@ -86,7 +86,7 @@ public interface IMasterServiceDao {
 
 	int deleteCourse(CourseDeleteDTO courseDeleteDTO) throws SQLException;
 
-	List<DivisionDTO> getAllDivision(int pageIndex, int totalRecords);
+	List<DivisionDTO> getAllDivision(int pageIndex, int totalRecords , Map<String, String> filters);
 
 	List<DivisionDTO> getAllDivisionCacheData();
 
@@ -100,7 +100,7 @@ public interface IMasterServiceDao {
 
 	int deleteDivision(DivisionDeleteDTO divisionDeleteDTO) throws SQLException;
 
-	List<ClassDTO> getAllClass(int pageIndex, int totalRecords);
+	List<ClassDTO> getAllClass(int pageIndex, int totalRecords , Map<String, String> filters) throws SQLException;
 
 	List<ClassDTO> getAllClassCacheData();
 

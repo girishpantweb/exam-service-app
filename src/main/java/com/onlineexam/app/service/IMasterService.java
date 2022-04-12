@@ -94,4 +94,8 @@ public interface IMasterService {
 	ServiceResponseDTO getAllSubSubjectsByFilter(Map<String, String> filters, int pageIndex, int totalNumberOfRecords);
 
 	ServiceResponseDTO getAllTopicsByFilter(Map<String, String> filters, int pageIndex, int totalNumberOfRecords);
+
+	ServiceResponseDTO getAllDivisionsByFilter(Map<String, String> filters, int pageIndex,int totalNumberOfRecords);
+	
+	ServiceResponseDTO getAllClassesByFilter(Map<String, String> filters, int pageIndex,int totalNumberOfRecords);
 }

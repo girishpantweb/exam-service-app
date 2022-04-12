@@ -4,14 +4,18 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import org.apache.commons.collections4.map.HashedMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
 import com.onlineexam.app.constants.DifficultyMaster;
 import com.onlineexam.app.dto.request.question.QuestionCreateDTO;
 import com.onlineexam.app.dto.request.question.QuestionDeleteDTO;
@@ -74,6 +78,37 @@ public class IQuestionServiceDaoImpl implements IQuestionServiceDao {
 				questionDTO.setUserName(rs.getString("user_name"));
 				questionDTO.setActiveStatus(rs.getInt("active_status"));
 				return questionDTO;
+			}
+		});
+	}
+
+	@Override
+	public Map<Long, List<QuestionDTO>> getAllQuestionsBySubSubjectId(int pageIndex, int totalRecords,
+			String subSubjectId) {
+		String query = "";
+		if (pageIndex == 0 && totalRecords == 0)
+			query = env.getProperty("fetchQuestionMasterQuery") + " where qm.sub_subject_id in (" + subSubjectId
+					+ ") AND qm.active_status=1";
+		else
+			query = env.getProperty("fetchQuestionMasterQuery") + "  where qm.sub_subject_id in (" + subSubjectId
+					+ ") limit " + (pageIndex * totalRecords) + " , " + totalRecords;
+		Map<Long, List<QuestionDTO>> mapData = new HashedMap<Long, List<QuestionDTO>>();
+		return jdbcTemplate.query(query, new ResultSetExtractor<Map<Long, List<QuestionDTO>>>() {
+			@Override
+			public Map<Long, List<QuestionDTO>> extractData(ResultSet rs) throws SQLException, DataAccessException {
+				while (rs.next()) {
+					QuestionDTO questionDTO = new QuestionDTO();
+					questionDTO.setQuestionId(rs.getLong("question_id"));
+					List<QuestionDTO> dataList = null;
+					if (mapData.get(rs.getLong("sub_subject_id")) != null) {
+						dataList = mapData.get(rs.getLong("sub_subject_id"));
+					} else {
+						dataList = new ArrayList<QuestionDTO>();
+					}
+					dataList.add(questionDTO);
+					mapData.put(rs.getLong("sub_subject_id"), dataList);
+				}
+				return mapData;
 			}
 		});
 	}

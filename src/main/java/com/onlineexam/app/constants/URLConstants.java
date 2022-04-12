@@ -76,6 +76,7 @@ public class URLConstants {
 	public static final String SAVES_STUDENTS = "/savestudents";
 	public static final String SAVES_TOPICS = "/savetopics";
 	public static final String SAVES_QUESTIONS = "/savequestions";
+	public static final String SAVES_QUESTIONS_PAPER = "/savequestionPaper";
 	public static final String UPDATE_SUBJECTS = "/editsubjects";
 	public static final String UPDATE_SUB_SUBJECTS = "/editsubsubjects";
 	public static final String UPDATE_CLASSES = "/editclasses";
@@ -84,6 +85,7 @@ public class URLConstants {
 	public static final String UPDATE_STUDENTS = "/editstudents";
 	public static final String UPDATE_TOPICS = "/edittopics";
 	public static final String UPDATE_QUESTIONS = "/editquestions";
+	public static final String UPDATE_QUESTIONS_PAPER = "/editquestionPaper";
 	public static final String DELETE_SUBJECTS = "/deletesubjects";
 	public static final String DELETE_SUB_SUBJECTS = "/deletesubsubjects";
 	public static final String DELETE_CLASSES = "/deleteclasses";
@@ -92,16 +94,21 @@ public class URLConstants {
 	public static final String DELETE_STUDENTS = "/deletestudents";
 	public static final String DELETE_TOPICS = "/deletetopics";
 	public static final String DELETE_QUESTIONS = "/deletequestions";
+	public static final String DELETE_QUESTIONS_PAPER = "/deletequestionPaper";
 	public static final String FETCH_ALL_SUBJECTS = "/getAllSubjects/{pageIndex}/{totalRecords}";
 	public static final String FETCH_ALL_SUB_SUBJECTS = "/getAllSubSubjects/{pageIndex}/{totalRecords}";
 	public static final String FETCH_ALL_SUB_SUBJECTS_BY_FILTER = "/getAllSubSubjectsByFilter";
+	public static final String FETCH_ALL_DIVISION_BY_FILTER = "/getAllDivisionsByFilter";
+	public static final String FETCH_ALL_CLASS_BY_FILTER = "/getAllClassesByFilter";
 	public static final String FETCH_ALL_CLASSES = "/getAllClasses/{pageIndex}/{totalRecords}";
 	public static final String FETCH_ALL_DIVISIONS = "/getAllDivisions/{pageIndex}/{totalRecords}";
 	public static final String FETCH_ALL_COURSES = "/getAllCourses/{pageIndex}/{totalRecords}";
 	public static final String FETCH_ALL_STUDENTS = "/getAllStudents/{pageIndex}/{totalRecords}";
 	public static final String FETCH_ALL_TOPICS = "/getAllTopics/{pageIndex}/{totalRecords}";
 	public static final String FETCH_ALL_QUESTIONS = "/getAllQuestions/{pageIndex}/{totalRecords}";
+	public static final String FETCH_ALL_QUESTIONS_PAPER = "/getAllQuestionPaper/{pageIndex}/{totalRecords}";
 	public static final String FETCH_ALL_QUESTIONS_BY_FILTER = "/getQuestionByFilter";
+	public static final String FETCH_ALL_QUESTIONS_PAPER_BY_FILTER = "/getQuestionPaperByFilter";
 	public static final String FETCH_ALL_TOPICS_BY_FILTER = "/getAllTopicsByFilter";
 
 }

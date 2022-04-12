@@ -16,6 +16,9 @@ import com.onlineexam.app.dto.ServiceResponseDTO;
 import com.onlineexam.app.dto.request.question.QuestionCreateDTO;
 import com.onlineexam.app.dto.request.question.QuestionDeleteDTO;
 import com.onlineexam.app.dto.request.question.QuestionModifyDTO;
+import com.onlineexam.app.dto.request.question.QuestionPaperCreateDTO;
+import com.onlineexam.app.dto.request.question.QuestionPaperDeleteDTO;
+import com.onlineexam.app.dto.request.question.QuestionPaperModifyDTO;
 import com.onlineexam.app.service.IQuestionService;
 
 @RestController
@@ -55,6 +58,37 @@ public class QuestionController {
 	public ServiceResponseDTO deleteQuestionsMaster(@RequestBody QuestionDeleteDTO questionDeleteDTO) {
 		LOGGER.info("Executing  deleteQuestionsMaster() method of QuestionController");
 		return questionService.deleteQuestions(questionDeleteDTO);
+	}
+
+	@GetMapping(value = URLConstants.FETCH_ALL_QUESTIONS_PAPER)
+	public ServiceResponseDTO fetchAllQuestionPaper(@PathVariable int pageIndex, @PathVariable int totalRecords) {
+		LOGGER.info("Executing  fetchAllQuestionPaper() method of QuestionController");
+		return questionService.getAllQuestionPaper(pageIndex, totalRecords);
+	}
+
+	@GetMapping(value = URLConstants.FETCH_ALL_QUESTIONS_PAPER_BY_FILTER)
+	public ServiceResponseDTO fetchAllQuestionPaperByFilter(@PathVariable int pageIndex,
+			@PathVariable int totalRecords) {
+		LOGGER.info("Executing  fetchAllQuestionPaperByFilter() method of QuestionController");
+		return questionService.getAllQuestionPaper(pageIndex, totalRecords);
+	}
+
+	@PostMapping(value = URLConstants.SAVES_QUESTIONS_PAPER)
+	public ServiceResponseDTO saveQuestionsPaperMaster(@RequestBody QuestionPaperCreateDTO questionCreateDTO) {
+		LOGGER.info("Executing  saveQuestionsPaperMaster() method of QuestionController");
+		return questionService.saveQuestionPaper(questionCreateDTO);
+	}
+
+	@PutMapping(value = URLConstants.UPDATE_QUESTIONS_PAPER)
+	public ServiceResponseDTO editQuestionsPaperMaster(@RequestBody QuestionPaperModifyDTO questionModifyDTO) {
+		LOGGER.info("Executing  editQuestionsPaperMaster() method of QuestionController");
+		return questionService.updateQuestionPaper(questionModifyDTO);
+	}
+
+	@DeleteMapping(value = URLConstants.DELETE_QUESTIONS_PAPER)
+	public ServiceResponseDTO deleteQuestionsPaperMaster(@RequestBody QuestionPaperDeleteDTO questionDeleteDTO) {
+		LOGGER.info("Executing  deleteQuestionsPaperMaster() method of QuestionController");
+		return questionService.deleteQuestionPaper(questionDeleteDTO);
 	}
 
 }

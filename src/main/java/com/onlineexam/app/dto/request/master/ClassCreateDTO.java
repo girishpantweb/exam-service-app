@@ -6,6 +6,8 @@ public class ClassCreateDTO {
 
 	private String className;
 	private String classDescription;
+	private long courseId;
+	private long divisionId;
 	private long userId;
 	private LocalDateTime dateTime;
 
@@ -23,6 +25,22 @@ public class ClassCreateDTO {
 
 	public void setClassDescription(String classDescription) {
 		this.classDescription = classDescription;
+	}
+
+	public long getCourseId() {
+		return courseId;
+	}
+
+	public void setCourseId(long courseId) {
+		this.courseId = courseId;
+	}
+
+	public long getDivisionId() {
+		return divisionId;
+	}
+
+	public void setDivisionId(long divisionId) {
+		this.divisionId = divisionId;
 	}
 
 	public long getUserId() {
@@ -48,6 +66,10 @@ public class ClassCreateDTO {
 		builder.append(className);
 		builder.append(", classDescription=");
 		builder.append(classDescription);
+		builder.append(", courseId=");
+		builder.append(courseId);
+		builder.append(", divisionId=");
+		builder.append(divisionId);
 		builder.append(", userId=");
 		builder.append(userId);
 		builder.append(", dateTime=");
