@@ -97,6 +97,14 @@ public class MasterController {
 		return iMasterService.getAllSubjects(pageIndex, totalRecords);
 	}
 
+	@PostMapping(value = URLConstants.FETCH_ALL_SUBJECT_BY_FILTER)
+	public ServiceResponseDTO fetchAllSubjectsByFilters(@RequestBody Map<String, String> filters) {
+		LOGGER.info("Executing  fetchAllSubjectsByFilters() method of MasterController");
+		int pageIndex = Integer.valueOf(filters.get("pageIndex"));
+		int totalRecords = Integer.valueOf(filters.get("totalRecords"));
+		return iMasterService.getAllSubjectsByFilter(filters, pageIndex, totalRecords);
+	}
+
 	@PostMapping(value = URLConstants.SAVES_SUBJECTS)
 	public ServiceResponseDTO saveSubjectMaster(@RequestBody SubjectCreateDTO subjectCreateDTO) {
 		LOGGER.info("Executing  saveSubjectMaster() method of MasterController");
@@ -144,10 +152,10 @@ public class MasterController {
 		LOGGER.info("Executing  fetchAllDivisions() method of MasterController");
 		return iMasterService.getAllDivisions(pageIndex, totalRecords);
 	}
-	
+
 	@PostMapping(value = URLConstants.FETCH_ALL_DIVISION_BY_FILTER)
 	public ServiceResponseDTO fetchAllDivisionsByFilters(@RequestBody Map<String, String> filters) {
-		LOGGER.info("Executing  fetchAllSubSubjectsByFilters() method of MasterController");
+		LOGGER.info("Executing  fetchAllDivisionsByFilters() method of MasterController");
 		int pageIndex = Integer.valueOf(filters.get("pageIndex"));
 		int totalRecords = Integer.valueOf(filters.get("totalRecords"));
 		return iMasterService.getAllDivisionsByFilter(filters, pageIndex, totalRecords);
@@ -176,7 +184,7 @@ public class MasterController {
 		LOGGER.info("Executing  fetchAllClasses() method of MasterController");
 		return iMasterService.getAllClasses(pageIndex, totalRecords);
 	}
-	
+
 	@PostMapping(value = URLConstants.FETCH_ALL_CLASS_BY_FILTER)
 	public ServiceResponseDTO fetchAllClassesByFilters(@RequestBody Map<String, String> filters) {
 		LOGGER.info("Executing  fetchAllClassesByFilters() method of MasterController");

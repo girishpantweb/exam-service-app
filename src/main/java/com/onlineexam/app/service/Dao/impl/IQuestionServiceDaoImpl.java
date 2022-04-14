@@ -20,9 +20,13 @@ import com.onlineexam.app.constants.DifficultyMaster;
 import com.onlineexam.app.dto.request.question.QuestionCreateDTO;
 import com.onlineexam.app.dto.request.question.QuestionDeleteDTO;
 import com.onlineexam.app.dto.request.question.QuestionModifyDTO;
+import com.onlineexam.app.dto.response.master.ClassDTO;
+import com.onlineexam.app.dto.response.master.CourseDTO;
+import com.onlineexam.app.dto.response.master.DivisionDTO;
 import com.onlineexam.app.dto.response.master.SubSubjectDTO;
 import com.onlineexam.app.dto.response.master.SubjectDTO;
 import com.onlineexam.app.dto.response.master.TopicDTO;
+import com.onlineexam.app.dto.response.question.DifficultyDTO;
 import com.onlineexam.app.dto.response.question.QuestionDTO;
 import com.onlineexam.app.service.Dao.IQuestionServiceDao;
 import com.onlineexam.app.utils.CommonUtility;
@@ -48,6 +52,15 @@ public class IQuestionServiceDaoImpl implements IQuestionServiceDao {
 			@Override
 			public QuestionDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 				QuestionDTO questionDTO = new QuestionDTO();
+				ClassDTO classDTO = new ClassDTO();
+				classDTO.setClassId(rs.getLong("class_id"));
+				classDTO.setClassName(rs.getString("class_name"));
+				CourseDTO courseDTO = new CourseDTO();
+				courseDTO.setCourseId(rs.getLong("course_id"));
+				courseDTO.setCourseName(rs.getString("course_name"));
+				DivisionDTO divisionDTO = new DivisionDTO();
+				divisionDTO.setDivisionId(rs.getLong("division_id"));
+				divisionDTO.setDivisionName(rs.getString("division_name"));
 				SubjectDTO subjectDTO = new SubjectDTO();
 				subjectDTO.setSubjectId(rs.getLong("subject_id"));
 				subjectDTO.setSubjectCode(rs.getString("subject_code"));
@@ -63,6 +76,9 @@ public class IQuestionServiceDaoImpl implements IQuestionServiceDao {
 				topicDTO.setTopicName(rs.getString("topic_code"));
 				topicDTO.setSubjectDTO(subjectDTO);
 				topicDTO.setSubSubjectDTO(subSubjectDTO);
+				questionDTO.setCourseDTO(courseDTO);
+				questionDTO.setDivisionDTO(divisionDTO);
+				questionDTO.setClassDTO(classDTO);
 				questionDTO.setSubject(subjectDTO);
 				questionDTO.setSubSubject(subSubjectDTO);
 				questionDTO.setTopic(topicDTO);
@@ -74,7 +90,11 @@ public class IQuestionServiceDaoImpl implements IQuestionServiceDao {
 				questionDTO.setOption4(rs.getString("option4"));
 				questionDTO.setAnswerKey(rs.getString("answer_key"));
 				questionDTO.setDescription(rs.getString("description"));
-				questionDTO.setDifficulty(DifficultyMaster.getDicultyFromId(rs.getInt("difficulty_level")));
+				DifficultyMaster df = DifficultyMaster.getDicultyFromId(rs.getInt("difficulty_level"));
+				DifficultyDTO difficultyDTO = new DifficultyDTO();
+				difficultyDTO.setId(df.getId());
+				difficultyDTO.setValue(df.getValue());
+				questionDTO.setDifficultyDTO(difficultyDTO);
 				questionDTO.setUserName(rs.getString("user_name"));
 				questionDTO.setActiveStatus(rs.getInt("active_status"));
 				return questionDTO;
@@ -129,18 +149,19 @@ public class IQuestionServiceDaoImpl implements IQuestionServiceDao {
 	@Override
 	public int saveQuestion(QuestionCreateDTO questionCreateDTO) throws SQLException {
 		String saveMasterQuery = env.getProperty("saveQuestionQuery");
-		return jdbcTemplate.update(saveMasterQuery,
-				new Object[] { questionCreateDTO.getSubjectId(), questionCreateDTO.getSubSubjectId(),
-						questionCreateDTO.getTopicId(), questionCreateDTO.getQuestion(), questionCreateDTO.getOption1(),
-						questionCreateDTO.getOption2(), questionCreateDTO.getOption3(), questionCreateDTO.getOption4(),
-						questionCreateDTO.getAnswerKey(), questionCreateDTO.getDescription(),
-						questionCreateDTO.getDifficultyLevel(), questionCreateDTO.getUserId() });
+		return jdbcTemplate.update(saveMasterQuery, new Object[] { questionCreateDTO.getCourseId(),
+				questionCreateDTO.getDivisionId(), questionCreateDTO.getClassId(), questionCreateDTO.getSubjectId(),
+				questionCreateDTO.getSubSubjectId(), questionCreateDTO.getTopicId(), questionCreateDTO.getQuestion(),
+				questionCreateDTO.getOption1(), questionCreateDTO.getOption2(), questionCreateDTO.getOption3(),
+				questionCreateDTO.getOption4(), questionCreateDTO.getAnswerKey(), questionCreateDTO.getDescription(),
+				questionCreateDTO.getDifficultyLevel(), questionCreateDTO.getUserId() });
 	}
 
 	@Override
 	public int updateQuestion(QuestionModifyDTO questionModifyDTO) throws SQLException {
 		String updateMasterQuery = env.getProperty("updateQuestionQuery");
-		return jdbcTemplate.update(updateMasterQuery, questionModifyDTO.getSubjectId(),
+		return jdbcTemplate.update(updateMasterQuery, questionModifyDTO.getCourseId(),
+				questionModifyDTO.getDivisionId(), questionModifyDTO.getClassId(), questionModifyDTO.getSubjectId(),
 				questionModifyDTO.getSubSubjectId(), questionModifyDTO.getTopicId(), questionModifyDTO.getQuestion(),
 				questionModifyDTO.getOption1(), questionModifyDTO.getOption2(), questionModifyDTO.getOption3(),
 				questionModifyDTO.getOption4(), questionModifyDTO.getAnswerKey(), questionModifyDTO.getDescription(),
@@ -161,18 +182,21 @@ public class IQuestionServiceDaoImpl implements IQuestionServiceDao {
 		return jdbcTemplate.batchUpdate(saveMasterQuery, new BatchPreparedStatementSetter() {
 			public void setValues(PreparedStatement ps, int i) throws SQLException {
 				QuestionCreateDTO questData = (QuestionCreateDTO) questionsList.get(i);
-				ps.setLong(1, questData.getSubjectId());
-				ps.setLong(2, questData.getSubSubjectId());
-				ps.setLong(3, questData.getTopicId());
-				ps.setString(4, questData.getQuestion());
-				ps.setString(5, questData.getOption1());
-				ps.setString(6, questData.getOption2());
-				ps.setString(7, questData.getOption3());
-				ps.setString(8, questData.getOption4());
-				ps.setInt(9, questData.getAnswerKey());
-				ps.setString(10, questData.getDescription());
-				ps.setInt(11, questData.getDifficultyLevel());
-				ps.setLong(12, questData.getUserId());
+				ps.setLong(1, questData.getCourseId());
+				ps.setLong(2, questData.getDivisionId());
+				ps.setLong(3, questData.getClassId());
+				ps.setLong(4, questData.getSubjectId());
+				ps.setLong(5, questData.getSubSubjectId());
+				ps.setLong(6, questData.getTopicId());
+				ps.setString(7, questData.getQuestion());
+				ps.setString(8, questData.getOption1());
+				ps.setString(9, questData.getOption2());
+				ps.setString(10, questData.getOption3());
+				ps.setString(11, questData.getOption4());
+				ps.setInt(12, questData.getAnswerKey());
+				ps.setString(13, questData.getDescription());
+				ps.setInt(14, questData.getDifficultyLevel());
+				ps.setLong(15, questData.getUserId());
 			}
 
 			public int getBatchSize() {
@@ -180,5 +204,4 @@ public class IQuestionServiceDaoImpl implements IQuestionServiceDao {
 			}
 		});
 	}
-
 }

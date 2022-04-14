@@ -1,8 +1,9 @@
 package com.onlineexam.app.dto.response.question;
 
 import java.sql.Blob;
-
-import com.onlineexam.app.constants.DifficultyMaster;
+import com.onlineexam.app.dto.response.master.ClassDTO;
+import com.onlineexam.app.dto.response.master.CourseDTO;
+import com.onlineexam.app.dto.response.master.DivisionDTO;
 import com.onlineexam.app.dto.response.master.SubSubjectDTO;
 import com.onlineexam.app.dto.response.master.SubjectDTO;
 import com.onlineexam.app.dto.response.master.TopicDTO;
@@ -11,6 +12,9 @@ public class QuestionDTO {
 
 	private long sno;
 	private long questionId;
+	private CourseDTO courseDTO;
+	private DivisionDTO divisionDTO;
+	private ClassDTO classDTO;
 	private SubjectDTO subject;
 	private SubSubjectDTO subSubject;
 	private TopicDTO topic;
@@ -22,7 +26,7 @@ public class QuestionDTO {
 	private String option4;
 	private String answerKey;
 	private String description;
-	private DifficultyMaster difficulty;
+	private DifficultyDTO difficultyDTO;
 	private String userName;
 	private int activeStatus;
 
@@ -40,6 +44,30 @@ public class QuestionDTO {
 
 	public void setQuestionId(long questionId) {
 		this.questionId = questionId;
+	}
+
+	public CourseDTO getCourseDTO() {
+		return courseDTO;
+	}
+
+	public void setCourseDTO(CourseDTO courseDTO) {
+		this.courseDTO = courseDTO;
+	}
+
+	public DivisionDTO getDivisionDTO() {
+		return divisionDTO;
+	}
+
+	public void setDivisionDTO(DivisionDTO divisionDTO) {
+		this.divisionDTO = divisionDTO;
+	}
+
+	public ClassDTO getClassDTO() {
+		return classDTO;
+	}
+
+	public void setClassDTO(ClassDTO classDTO) {
+		this.classDTO = classDTO;
 	}
 
 	public SubjectDTO getSubject() {
@@ -130,12 +158,12 @@ public class QuestionDTO {
 		this.description = description;
 	}
 
-	public DifficultyMaster getDifficulty() {
-		return difficulty;
+	public DifficultyDTO getDifficultyDTO() {
+		return difficultyDTO;
 	}
 
-	public void setDifficulty(DifficultyMaster difficulty) {
-		this.difficulty = difficulty;
+	public void setDifficultyDTO(DifficultyDTO difficultyDTO) {
+		this.difficultyDTO = difficultyDTO;
 	}
 
 	public String getUserName() {
@@ -161,6 +189,12 @@ public class QuestionDTO {
 		builder.append(sno);
 		builder.append(", questionId=");
 		builder.append(questionId);
+		builder.append(", courseDTO=");
+		builder.append(courseDTO);
+		builder.append(", divisionDTO=");
+		builder.append(divisionDTO);
+		builder.append(", classDTO=");
+		builder.append(classDTO);
 		builder.append(", subject=");
 		builder.append(subject);
 		builder.append(", subSubject=");
@@ -183,8 +217,8 @@ public class QuestionDTO {
 		builder.append(answerKey);
 		builder.append(", description=");
 		builder.append(description);
-		builder.append(", difficulty=");
-		builder.append(difficulty);
+		builder.append(", difficultyDTO=");
+		builder.append(difficultyDTO);
 		builder.append(", userName=");
 		builder.append(userName);
 		builder.append(", activeStatus=");

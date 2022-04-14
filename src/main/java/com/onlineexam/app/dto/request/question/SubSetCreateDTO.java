@@ -1,17 +1,26 @@
-package com.onlineexam.app.dto.request.master;
+package com.onlineexam.app.dto.request.question;
 
 import java.time.LocalDateTime;
 
-public class SubSubjectCreateDTO {
+public class SubSetCreateDTO {
 
+	private long subjectId;
 	private long courseId;
 	private long divisionId;
 	private long classId;
-	private long subjectId;
-	private String subSubjectCode;
-	private String subSubjectName;
+	private long subSubjectId;
+	private long topicId;
+	private String subsetName;
 	private long userId;
 	private LocalDateTime dateTime;
+
+	public long getSubjectId() {
+		return subjectId;
+	}
+
+	public void setSubjectId(long subjectId) {
+		this.subjectId = subjectId;
+	}
 
 	public long getCourseId() {
 		return courseId;
@@ -37,28 +46,28 @@ public class SubSubjectCreateDTO {
 		this.classId = classId;
 	}
 
-	public long getSubjectId() {
-		return subjectId;
+	public long getSubSubjectId() {
+		return subSubjectId;
 	}
 
-	public void setSubjectId(long subjectId) {
-		this.subjectId = subjectId;
+	public void setSubSubjectId(long subSubjectId) {
+		this.subSubjectId = subSubjectId;
 	}
 
-	public String getSubSubjectCode() {
-		return subSubjectCode;
+	public long getTopicId() {
+		return topicId;
 	}
 
-	public void setSubSubjectCode(String subSubjectCode) {
-		this.subSubjectCode = subSubjectCode;
+	public void setTopicId(long topicId) {
+		this.topicId = topicId;
 	}
 
-	public String getSubSubjectName() {
-		return subSubjectName;
+	public String getSubsetName() {
+		return subsetName;
 	}
 
-	public void setSubSubjectName(String subSubjectName) {
-		this.subSubjectName = subSubjectName;
+	public void setSubsetName(String subsetName) {
+		this.subsetName = subsetName;
 	}
 
 	public long getUserId() {
@@ -80,18 +89,20 @@ public class SubSubjectCreateDTO {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("SubSubjectCreateDTO [courseId=");
+		builder.append("SubSetCreateDTO [subjectId=");
+		builder.append(subjectId);
+		builder.append(", courseId=");
 		builder.append(courseId);
 		builder.append(", divisionId=");
 		builder.append(divisionId);
 		builder.append(", classId=");
 		builder.append(classId);
-		builder.append(", subjectId=");
-		builder.append(subjectId);
-		builder.append(", subSubjectCode=");
-		builder.append(subSubjectCode);
-		builder.append(", subSubjectName=");
-		builder.append(subSubjectName);
+		builder.append(", subSubjectId=");
+		builder.append(subSubjectId);
+		builder.append(", topicId=");
+		builder.append(topicId);
+		builder.append(", subsetName=");
+		builder.append(subsetName);
 		builder.append(", userId=");
 		builder.append(userId);
 		builder.append(", dateTime=");

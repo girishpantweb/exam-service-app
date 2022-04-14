@@ -370,7 +370,42 @@ public class MasterServiceImpl implements IMasterService {
 		Integer count = 0;
 		int slNo[] = { 0 };
 		try {
-			allSubjects = iMasterServiceDao.getAllSubjects(pageIndex, totalNumberOfRecords);
+			allSubjects = iMasterServiceDao.getAllSubjects(pageIndex, totalNumberOfRecords, null);
+			if (allSubjects != null && allSubjects.size() > 0) {
+				allSubjects.forEach(item -> {
+					slNo[0]++;
+					item.setSno(slNo[0]);
+				});
+			}
+			count = iMasterServiceDao.getTotalSubjectCount();
+			customReponseStatus = new CustomReponseStatus(StatusMaster.SUCCESS.getResponseCode(),
+					StatusMaster.SUCCESS.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+			response.put(ResponseKeyValue.SUBJECT_MASTER_DATA_KEY.key(), allSubjects);
+			response.put(ResponseKeyValue.SUBJECT_MASTER_ALL_DATA_COUNT_KEY.key(), count);
+		} catch (Exception ex) {
+			LOGGER.error("Exception Occur in getAllSubjects {}", ex.getMessage());
+			customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+					StatusMaster.FAILED.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+		} finally {
+			serviceResponse.setServiceResponse(response);
+		}
+		return serviceResponse;
+	}
+
+	@Override
+	public ServiceResponseDTO getAllSubjectsByFilter(Map<String, String> filters, int pageIndex,
+			int totalNumberOfRecords) {
+		LOGGER.info("Executing  getAllSubjectsByFilter() method of ServiceResponseDTO");
+		LinkedHashMap<Object, Object> response = new LinkedHashMap<>();
+		ServiceResponseDTO serviceResponse = new ServiceResponseDTO();
+		CustomReponseStatus customReponseStatus = null;
+		List<SubjectDTO> allSubjects = null;
+		Integer count = 0;
+		int slNo[] = { 0 };
+		try {
+			allSubjects = iMasterServiceDao.getAllSubjects(pageIndex, totalNumberOfRecords, filters);
 			if (allSubjects != null && allSubjects.size() > 0) {
 				allSubjects.forEach(item -> {
 					slNo[0]++;

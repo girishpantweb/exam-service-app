@@ -5,6 +5,9 @@ import java.time.LocalDateTime;
 public class SubSubjectModifyDTO {
 
 	private long subSubjectId;
+	private long courseId;
+	private long divisionId;
+	private long classId;
 	private long subjectId;
 	private String subSubjectCode;
 	private String subSubjectName;
@@ -17,6 +20,30 @@ public class SubSubjectModifyDTO {
 
 	public void setSubSubjectId(long subSubjectId) {
 		this.subSubjectId = subSubjectId;
+	}
+
+	public long getCourseId() {
+		return courseId;
+	}
+
+	public void setCourseId(long courseId) {
+		this.courseId = courseId;
+	}
+
+	public long getDivisionId() {
+		return divisionId;
+	}
+
+	public void setDivisionId(long divisionId) {
+		this.divisionId = divisionId;
+	}
+
+	public long getClassId() {
+		return classId;
+	}
+
+	public void setClassId(long classId) {
+		this.classId = classId;
 	}
 
 	public long getSubjectId() {
@@ -64,6 +91,12 @@ public class SubSubjectModifyDTO {
 		StringBuilder builder = new StringBuilder();
 		builder.append("SubSubjectModifyDTO [subSubjectId=");
 		builder.append(subSubjectId);
+		builder.append(", courseId=");
+		builder.append(courseId);
+		builder.append(", divisionId=");
+		builder.append(divisionId);
+		builder.append(", classId=");
+		builder.append(classId);
 		builder.append(", subjectId=");
 		builder.append(subjectId);
 		builder.append(", subSubjectCode=");

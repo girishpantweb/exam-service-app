@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 
 public class TopicCreateDTO {
 
+	private long courseId;
+	private long divisionId;
+	private long classId;
 	private long subjectId;
 	private long subSubjectId;
 	private String topicCode;
@@ -11,6 +14,30 @@ public class TopicCreateDTO {
 	private long maxNumberofQuestions;
 	private long userId;
 	private LocalDateTime dateTime;
+
+	public long getCourseId() {
+		return courseId;
+	}
+
+	public void setCourseId(long courseId) {
+		this.courseId = courseId;
+	}
+
+	public long getDivisionId() {
+		return divisionId;
+	}
+
+	public void setDivisionId(long divisionId) {
+		this.divisionId = divisionId;
+	}
+
+	public long getClassId() {
+		return classId;
+	}
+
+	public void setClassId(long classId) {
+		this.classId = classId;
+	}
 
 	public long getSubjectId() {
 		return subjectId;
@@ -71,7 +98,13 @@ public class TopicCreateDTO {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("TopicCreateDTO [subjectId=");
+		builder.append("TopicCreateDTO [courseId=");
+		builder.append(courseId);
+		builder.append(", divisionId=");
+		builder.append(divisionId);
+		builder.append(", classId=");
+		builder.append(classId);
+		builder.append(", subjectId=");
 		builder.append(subjectId);
 		builder.append(", subSubjectId=");
 		builder.append(subSubjectId);

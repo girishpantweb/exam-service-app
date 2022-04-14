@@ -4,6 +4,9 @@ public class SubSubjectDTO {
 
 	private long sno;
 	private long subSubjectId;
+	private CourseDTO courseDTO;
+	private DivisionDTO divisionDTO;
+	private ClassDTO classDTO;
 	private SubjectDTO subjectDTO;
 	private String subSubjectCode;
 	private String subSubjectName;
@@ -24,6 +27,30 @@ public class SubSubjectDTO {
 
 	public void setSubSubjectId(long subSubjectId) {
 		this.subSubjectId = subSubjectId;
+	}
+
+	public CourseDTO getCourseDTO() {
+		return courseDTO;
+	}
+
+	public void setCourseDTO(CourseDTO courseDTO) {
+		this.courseDTO = courseDTO;
+	}
+
+	public DivisionDTO getDivisionDTO() {
+		return divisionDTO;
+	}
+
+	public void setDivisionDTO(DivisionDTO divisionDTO) {
+		this.divisionDTO = divisionDTO;
+	}
+
+	public ClassDTO getClassDTO() {
+		return classDTO;
+	}
+
+	public void setClassDTO(ClassDTO classDTO) {
+		this.classDTO = classDTO;
 	}
 
 	public SubjectDTO getSubjectDTO() {
@@ -73,6 +100,12 @@ public class SubSubjectDTO {
 		builder.append(sno);
 		builder.append(", subSubjectId=");
 		builder.append(subSubjectId);
+		builder.append(", courseDTO=");
+		builder.append(courseDTO);
+		builder.append(", divisionDTO=");
+		builder.append(divisionDTO);
+		builder.append(", classDTO=");
+		builder.append(classDTO);
 		builder.append(", subjectDTO=");
 		builder.append(subjectDTO);
 		builder.append(", subSubjectCode=");
@@ -86,5 +119,4 @@ public class SubSubjectDTO {
 		builder.append("]");
 		return builder.toString();
 	}
-
 }

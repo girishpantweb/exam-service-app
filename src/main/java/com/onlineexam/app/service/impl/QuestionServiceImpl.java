@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Service;
 import com.onlineexam.app.constants.ResponseKeyValue;
 import com.onlineexam.app.constants.StatusMaster;
 import com.onlineexam.app.dto.ServiceResponseDTO;
+import com.onlineexam.app.dto.request.question.ManageSubSetCreateDTO;
 import com.onlineexam.app.dto.request.question.QuestionCreateDTO;
 import com.onlineexam.app.dto.request.question.QuestionDeleteDTO;
 import com.onlineexam.app.dto.request.question.QuestionModifyDTO;
@@ -25,6 +25,9 @@ import com.onlineexam.app.dto.request.question.QuestionPaperCreateDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperDeleteDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperModifyDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperSetCreateDTO;
+import com.onlineexam.app.dto.request.question.SubSetCreateDTO;
+import com.onlineexam.app.dto.request.question.SubSetDeleteDTO;
+import com.onlineexam.app.dto.request.question.SubSetModifyDTO;
 import com.onlineexam.app.dto.response.question.QuestionDTO;
 import com.onlineexam.app.pojo.CustomReponseStatus;
 import com.onlineexam.app.service.IQuestionService;
@@ -317,4 +320,133 @@ public class QuestionServiceImpl implements IQuestionService {
 		return serviceResponse;
 	}
 
+	@Override
+	public ServiceResponseDTO saveQuestionSubSet(SubSetCreateDTO subSetCreateDTO) {
+		LOGGER.info("Executing  saveQuestions() method of QuestionServiceImpl");
+		LinkedHashMap<Object, Object> response = new LinkedHashMap<>();
+		ServiceResponseDTO serviceResponse = new ServiceResponseDTO();
+		CustomReponseStatus customReponseStatus = null;
+		int status = 0;
+		try {
+			status = questionPaperServiceDao.saveQuestionSubSet(subSetCreateDTO);
+		} catch (SQLException sqx) {
+			LOGGER.error("SQLException Occur in saveQuestions {}", sqx.getMessage());
+			customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+					StatusMaster.FAILED.getResponseMessage());
+		} finally {
+
+		}
+		if (status > 0)
+			customReponseStatus = new CustomReponseStatus(StatusMaster.SUCCESS.getResponseCode(),
+					StatusMaster.SUCCESS.getResponseMessage());
+		else {
+			customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+					StatusMaster.FAILED.getResponseMessage());
+		}
+		response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+		serviceResponse.setServiceResponse(response);
+		return serviceResponse;
+	}
+
+	@Override
+	public ServiceResponseDTO updateQuestionSubSet(SubSetModifyDTO subSetModifyDTO) {
+		LOGGER.info("Executing  updateQuestionSubSet() method of QuestionServiceImpl");
+		LinkedHashMap<Object, Object> response = new LinkedHashMap<>();
+		ServiceResponseDTO serviceResponse = new ServiceResponseDTO();
+		CustomReponseStatus customReponseStatus = null;
+		int status = 0;
+		boolean isDuplicateData = true;
+		try {
+			if (subSetModifyDTO.getQuesSubsetId() > 0)
+				status = questionPaperServiceDao.updateQuestionSubSet(subSetModifyDTO);
+			else
+				isDuplicateData = false;
+		} catch (SQLException sqx) {
+			LOGGER.error("SQLException Occur in updateQuestionSubSet {}", sqx.getMessage());
+			customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+					StatusMaster.FAILED.getResponseMessage());
+		}
+		if (status > 0)
+			customReponseStatus = new CustomReponseStatus(StatusMaster.SUCCESS.getResponseCode(),
+					StatusMaster.SUCCESS.getResponseMessage());
+		else {
+			if (!isDuplicateData)
+				customReponseStatus = new CustomReponseStatus(StatusMaster.QUESTIONREADYEXIST.getResponseCode(),
+						StatusMaster.QUESTIONREADYEXIST.getResponseMessage());
+			else
+				customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+						StatusMaster.FAILED.getResponseMessage());
+		}
+		response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+		serviceResponse.setServiceResponse(response);
+		return serviceResponse;
+	}
+
+	@Override
+	public ServiceResponseDTO deleteQuestionSubSet(SubSetDeleteDTO subSetDeleteDTO) {
+		LOGGER.info("Executing  deleteQuestionSubSet() method of QuestionServiceImpl");
+		LinkedHashMap<Object, Object> response = new LinkedHashMap<>();
+		ServiceResponseDTO serviceResponse = new ServiceResponseDTO();
+		CustomReponseStatus customReponseStatus = null;
+		int status = 0;
+		boolean isDuplicateData = true;
+		try {
+			if (subSetDeleteDTO.getQuesSubsetId() > 0)
+				status = questionPaperServiceDao.deleteQuestionSubSet(subSetDeleteDTO);
+			else
+				isDuplicateData = false;
+		} catch (SQLException sqx) {
+			LOGGER.error("SQLException Occur in deleteQuestionSubSet {}", sqx.getMessage());
+			customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+					StatusMaster.FAILED.getResponseMessage());
+		}
+		if (status > 0)
+			customReponseStatus = new CustomReponseStatus(StatusMaster.SUCCESS.getResponseCode(),
+					StatusMaster.SUCCESS.getResponseMessage());
+		else {
+			if (!isDuplicateData)
+				customReponseStatus = new CustomReponseStatus(StatusMaster.QUESTIONREADYEXIST.getResponseCode(),
+						StatusMaster.QUESTIONREADYEXIST.getResponseMessage());
+			else
+				customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+						StatusMaster.FAILED.getResponseMessage());
+		}
+		response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+		serviceResponse.setServiceResponse(response);
+		return serviceResponse;
+	}
+
+	@Override
+	public ServiceResponseDTO manageQuestionSubSet(ManageSubSetCreateDTO manageSubSetCreateDTO) {
+		LOGGER.info("Executing  manageQuestionSubSet() method of QuestionServiceImpl");
+		LinkedHashMap<Object, Object> response = new LinkedHashMap<>();
+		ServiceResponseDTO serviceResponse = new ServiceResponseDTO();
+		CustomReponseStatus customReponseStatus = null;
+		long status = 0;
+		boolean isDuplicateData = true;
+		try {
+			if (manageSubSetCreateDTO.getQuesSubsetId() > 0)
+				status = questionPaperServiceDao.manageQuestionSubSet(manageSubSetCreateDTO);
+			else
+				isDuplicateData = false;
+		} catch (SQLException sqx) {
+			LOGGER.error("SQLException Occur in deleteQuestionSubSet {}", sqx.getMessage());
+			customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+					StatusMaster.FAILED.getResponseMessage());
+		}
+		if (status > 0)
+			customReponseStatus = new CustomReponseStatus(StatusMaster.SUCCESS.getResponseCode(),
+					StatusMaster.SUCCESS.getResponseMessage());
+		else {
+			if (!isDuplicateData)
+				customReponseStatus = new CustomReponseStatus(StatusMaster.QUESTIONREADYEXIST.getResponseCode(),
+						StatusMaster.QUESTIONREADYEXIST.getResponseMessage());
+			else
+				customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+						StatusMaster.FAILED.getResponseMessage());
+		}
+		response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+		serviceResponse.setServiceResponse(response);
+		return serviceResponse;
+	}
 }

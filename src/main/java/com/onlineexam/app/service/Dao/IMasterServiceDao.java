@@ -58,7 +58,7 @@ public interface IMasterServiceDao {
 
 	int[] createRoleAuth(List<RoleAuthCreateDTO> roleAuthCreateDTODTOList);
 
-	List<SubjectDTO> getAllSubjects(int pageIndex, int totalRecords);
+	List<SubjectDTO> getAllSubjects(int pageIndex, int totalRecords, Map<String, String> filters);
 	
 	List<SubjectDTO> getAllSubjectsCacheData();
 

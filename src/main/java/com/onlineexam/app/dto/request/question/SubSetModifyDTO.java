@@ -1,27 +1,34 @@
-package com.onlineexam.app.dto.request.master;
+package com.onlineexam.app.dto.request.question;
 
 import java.time.LocalDateTime;
 
-public class TopicModifyDTO {
+public class SubSetModifyDTO {
 
-	private long topicId;
+	private long quesSubsetId;
+	private long subjectId;
 	private long courseId;
 	private long divisionId;
 	private long classId;
-	private long subjectId;
 	private long subSubjectId;
-	private String topicCode;
-	private String topicName;
-	private long maxNumberofQuestions;
+	private long topicId;
+	private String subsetName;
 	private long userId;
 	private LocalDateTime dateTime;
 
-	public long getTopicId() {
-		return topicId;
+	public long getQuesSubsetId() {
+		return quesSubsetId;
 	}
 
-	public void setTopicId(long topicId) {
-		this.topicId = topicId;
+	public void setQuesSubsetId(long quesSubsetId) {
+		this.quesSubsetId = quesSubsetId;
+	}
+
+	public long getSubjectId() {
+		return subjectId;
+	}
+
+	public void setSubjectId(long subjectId) {
+		this.subjectId = subjectId;
 	}
 
 	public long getCourseId() {
@@ -48,14 +55,6 @@ public class TopicModifyDTO {
 		this.classId = classId;
 	}
 
-	public long getSubjectId() {
-		return subjectId;
-	}
-
-	public void setSubjectId(long subjectId) {
-		this.subjectId = subjectId;
-	}
-
 	public long getSubSubjectId() {
 		return subSubjectId;
 	}
@@ -64,28 +63,20 @@ public class TopicModifyDTO {
 		this.subSubjectId = subSubjectId;
 	}
 
-	public String getTopicCode() {
-		return topicCode;
+	public long getTopicId() {
+		return topicId;
 	}
 
-	public void setTopicCode(String topicCode) {
-		this.topicCode = topicCode;
+	public void setTopicId(long topicId) {
+		this.topicId = topicId;
 	}
 
-	public String getTopicName() {
-		return topicName;
+	public String getSubsetName() {
+		return subsetName;
 	}
 
-	public void setTopicName(String topicName) {
-		this.topicName = topicName;
-	}
-
-	public long getMaxNumberofQuestions() {
-		return maxNumberofQuestions;
-	}
-
-	public void setMaxNumberofQuestions(long maxNumberofQuestions) {
-		this.maxNumberofQuestions = maxNumberofQuestions;
+	public void setSubsetName(String subsetName) {
+		this.subsetName = subsetName;
 	}
 
 	public long getUserId() {
@@ -107,24 +98,22 @@ public class TopicModifyDTO {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("TopicModifyDTO [topicId=");
-		builder.append(topicId);
+		builder.append("SubSetModifyDTO [quesSubsetId=");
+		builder.append(quesSubsetId);
+		builder.append(", subjectId=");
+		builder.append(subjectId);
 		builder.append(", courseId=");
 		builder.append(courseId);
 		builder.append(", divisionId=");
 		builder.append(divisionId);
 		builder.append(", classId=");
 		builder.append(classId);
-		builder.append(", subjectId=");
-		builder.append(subjectId);
 		builder.append(", subSubjectId=");
 		builder.append(subSubjectId);
-		builder.append(", topicCode=");
-		builder.append(topicCode);
-		builder.append(", topicName=");
-		builder.append(topicName);
-		builder.append(", maxNumberofQuestions=");
-		builder.append(maxNumberofQuestions);
+		builder.append(", topicId=");
+		builder.append(topicId);
+		builder.append(", subsetName=");
+		builder.append(subsetName);
 		builder.append(", userId=");
 		builder.append(userId);
 		builder.append(", dateTime=");
@@ -132,4 +121,5 @@ public class TopicModifyDTO {
 		builder.append("]");
 		return builder.toString();
 	}
+
 }

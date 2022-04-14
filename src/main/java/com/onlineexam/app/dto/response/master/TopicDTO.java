@@ -4,6 +4,9 @@ public class TopicDTO {
 
 	private long sno;
 	private long topicId;
+	private CourseDTO courseDTO;
+	private DivisionDTO divisionDTO;
+	private ClassDTO classDTO;
 	private SubjectDTO subjectDTO;
 	private SubSubjectDTO subSubjectDTO;
 	private String topicCode;
@@ -26,6 +29,30 @@ public class TopicDTO {
 
 	public void setTopicId(long topicId) {
 		this.topicId = topicId;
+	}
+
+	public CourseDTO getCourseDTO() {
+		return courseDTO;
+	}
+
+	public void setCourseDTO(CourseDTO courseDTO) {
+		this.courseDTO = courseDTO;
+	}
+
+	public DivisionDTO getDivisionDTO() {
+		return divisionDTO;
+	}
+
+	public void setDivisionDTO(DivisionDTO divisionDTO) {
+		this.divisionDTO = divisionDTO;
+	}
+
+	public ClassDTO getClassDTO() {
+		return classDTO;
+	}
+
+	public void setClassDTO(ClassDTO classDTO) {
+		this.classDTO = classDTO;
 	}
 
 	public SubjectDTO getSubjectDTO() {
@@ -91,6 +118,12 @@ public class TopicDTO {
 		builder.append(sno);
 		builder.append(", topicId=");
 		builder.append(topicId);
+		builder.append(", courseDTO=");
+		builder.append(courseDTO);
+		builder.append(", divisionDTO=");
+		builder.append(divisionDTO);
+		builder.append(", classDTO=");
+		builder.append(classDTO);
 		builder.append(", subjectDTO=");
 		builder.append(subjectDTO);
 		builder.append(", subSubjectDTO=");

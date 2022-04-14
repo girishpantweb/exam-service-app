@@ -99,6 +99,7 @@ public class URLConstants {
 	public static final String FETCH_ALL_SUB_SUBJECTS = "/getAllSubSubjects/{pageIndex}/{totalRecords}";
 	public static final String FETCH_ALL_SUB_SUBJECTS_BY_FILTER = "/getAllSubSubjectsByFilter";
 	public static final String FETCH_ALL_DIVISION_BY_FILTER = "/getAllDivisionsByFilter";
+	public static final String FETCH_ALL_SUBJECT_BY_FILTER = "/getAllSubjectsByFilter";
 	public static final String FETCH_ALL_CLASS_BY_FILTER = "/getAllClassesByFilter";
 	public static final String FETCH_ALL_CLASSES = "/getAllClasses/{pageIndex}/{totalRecords}";
 	public static final String FETCH_ALL_DIVISIONS = "/getAllDivisions/{pageIndex}/{totalRecords}";

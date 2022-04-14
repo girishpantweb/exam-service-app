@@ -2,7 +2,6 @@ package com.onlineexam.app.service.Dao.impl;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,23 +9,21 @@ import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-
-import com.onlineexam.app.constants.DifficultyMaster;
+import com.onlineexam.app.dto.request.question.ManageSubSetCreateDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperCreateDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperDeleteDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperModifyDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperSetCreateDTO;
 import com.onlineexam.app.dto.request.question.QuestionSubSubjectCreateDTO;
-import com.onlineexam.app.dto.response.master.SubSubjectDTO;
-import com.onlineexam.app.dto.response.master.SubjectDTO;
-import com.onlineexam.app.dto.response.master.TopicDTO;
-import com.onlineexam.app.dto.response.question.QuestionDTO;
+import com.onlineexam.app.dto.request.question.SubSetCreateDTO;
+import com.onlineexam.app.dto.request.question.SubSetDeleteDTO;
+import com.onlineexam.app.dto.request.question.SubSetModifyDTO;
 import com.onlineexam.app.service.Dao.IQuestionPaperServiceDao;
+import com.onlineexam.app.utils.CommonUtility;
 
 @Repository("questionPaperServiceDaoImpl")
 public class IQuestionPaperServiceDaoImpl implements IQuestionPaperServiceDao {
@@ -35,8 +32,6 @@ public class IQuestionPaperServiceDaoImpl implements IQuestionPaperServiceDao {
 	JdbcTemplate jdbcTemplate;
 	@Autowired
 	private Environment env;
-
-	
 
 	@Override
 	public Integer getTotalQuestionPaper() {
@@ -118,6 +113,7 @@ public class IQuestionPaperServiceDaoImpl implements IQuestionPaperServiceDao {
 				ps.setLong(4, questionPaperSetCreateList.get(i).getSortNo());
 				ps.setLong(4, questionPaperSetCreateList.get(i).getUserId());
 			}
+
 			@Override
 			public int getBatchSize() {
 				return questionPaperSetCreateList.size();
@@ -125,4 +121,58 @@ public class IQuestionPaperServiceDaoImpl implements IQuestionPaperServiceDao {
 		});
 	}
 
+	@Override
+	public int saveQuestionSubSet(SubSetCreateDTO subSetCreateDTO) throws SQLException {
+		String saveMasterQuery = env.getProperty("saveQuestionPaperSubSetQuery");
+		return jdbcTemplate.update(saveMasterQuery,
+				new Object[] { subSetCreateDTO.getCourseId(), subSetCreateDTO.getDivisionId(),
+						subSetCreateDTO.getClassId(), subSetCreateDTO.getSubjectId(), subSetCreateDTO.getSubSubjectId(),
+						subSetCreateDTO.getSubsetName(), subSetCreateDTO.getUserId() });
+	}
+
+	@Override
+	public int updateQuestionSubSet(SubSetModifyDTO subSetModifyDTO) throws SQLException {
+		String updateMasterQuery = env.getProperty("updateQuestionPaperSubSetQuery");
+		return jdbcTemplate.update(updateMasterQuery, subSetModifyDTO.getCourseId(), subSetModifyDTO.getDivisionId(),
+				subSetModifyDTO.getClassId(), subSetModifyDTO.getSubjectId(), subSetModifyDTO.getSubSubjectId(),
+				subSetModifyDTO.getSubsetName(), subSetModifyDTO.getUserId(), subSetModifyDTO.getQuesSubsetId());
+
+	}
+
+	@Override
+	@Transactional(rollbackFor = { Exception.class, SQLException.class })
+	public int deleteQuestionSubSet(SubSetDeleteDTO subSetDeleteDTO) throws SQLException {
+		String deleteMasterQuery = env.getProperty("deleteQuestionPaperSubSetQuery");
+		jdbcTemplate.update(deleteMasterQuery, subSetDeleteDTO.getActiveStatus(), subSetDeleteDTO.getUserId(),
+				CommonUtility.getCurrentDateTime(), subSetDeleteDTO.getQuesSubsetId());
+		String deleteMasterQuery1 = env.getProperty("manageDeleteQuestionPaperSubSetQuery1");
+		return jdbcTemplate.update(deleteMasterQuery1, subSetDeleteDTO.getActiveStatus(),
+				subSetDeleteDTO.getQuesSubsetId());
+	}
+
+	@Override
+	@Transactional(rollbackFor = { Exception.class, SQLException.class })
+	public long manageQuestionSubSet(ManageSubSetCreateDTO manageSubSetCreateDTO) throws SQLException {
+		String saveMasterQuery = env.getProperty("manageUpdateQuestionPaperSubSetQuery");
+		jdbcTemplate.update(saveMasterQuery, manageSubSetCreateDTO.getQuesSubsetId());
+		List<Integer> questionList = manageSubSetCreateDTO.getQuestionId();
+		String saveMasterQuery1 = env.getProperty("manageSaveQuestionPaperSubSetQuery");
+		int[] size = jdbcTemplate.batchUpdate(saveMasterQuery1, new BatchPreparedStatementSetter() {
+			@Override
+			public void setValues(PreparedStatement ps, int i) throws SQLException {
+				ps.setLong(1, manageSubSetCreateDTO.getQuesSubsetId());
+				ps.setLong(2, questionList.get(i));
+			}
+
+			@Override
+			public int getBatchSize() {
+				return questionList.size();
+			}
+		});
+		if (size.length > 0) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
 }

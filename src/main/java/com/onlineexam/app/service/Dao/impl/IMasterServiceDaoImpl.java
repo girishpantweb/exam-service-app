@@ -212,14 +212,23 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 	}
 
 	@Override
-	public List<SubjectDTO> getAllSubjects(int pageIndex, int totalRecords) {
-		String query = "";
-		if (pageIndex == 0 && totalRecords == 0)
-			query = env.getProperty("fetchSubjectMasterQuery") + " where sm.active_status=1";
-		else
-			query = env.getProperty("fetchSubjectMasterQuery") + "  limit " + (pageIndex * totalRecords) + " , "
-					+ totalRecords;
-		return jdbcTemplate.query(query, new RowMapper<SubjectDTO>() {
+	public List<SubjectDTO> getAllSubjects(int pageIndex, int totalRecords, Map<String, String> filters) {
+		StringBuilder query = new StringBuilder();
+		if (filters == null) {
+			if (pageIndex == 0 && totalRecords == 0)
+				query.append(env.getProperty("fetchSubjectMasterQuery")).append(" where sm.active_status=1");
+			else
+				query.append(env.getProperty("fetchSubjectMasterQuery"))
+						.append("  limit " + (pageIndex * totalRecords) + " , ").append(totalRecords);
+		} else {
+			query.append(env.getProperty("fetchSubjectMasterQuery")).append(" where sm.active_status=1 ");
+			filters.forEach((key, value) -> {
+				if (key.equals("classId")) {
+					query.append(" and sm.class_id =").append(value);
+				}
+			});
+		}
+		return jdbcTemplate.query(query.toString(), new RowMapper<SubjectDTO>() {
 			@Override
 			public SubjectDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 				SubjectDTO subjectDTO = new SubjectDTO();
@@ -263,6 +272,16 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 				CourseDTO courseDTO = new CourseDTO();
 				courseDTO.setCourseId(rs.getLong("course_id"));
 				courseDTO.setCourseName(rs.getString("course_name"));
+				DivisionDTO divisionDTO = new DivisionDTO();
+				divisionDTO.setDivisionId(rs.getLong("division_id"));
+				divisionDTO.setDivisionName(rs.getString("division_name"));
+				divisionDTO.setCourseDTO(courseDTO);
+				subjectDTO.setDivisionDTO(divisionDTO);
+				ClassDTO classDTO = new ClassDTO();
+				classDTO.setClassId(rs.getLong("class_id"));
+				classDTO.setClassName(rs.getString("class_name"));
+				classDTO.setDivisionDTO(divisionDTO);
+				subjectDTO.setClassDTO(classDTO);
 				subjectDTO.setCourseDTO(courseDTO);
 				subjectDTO.setSubjectId(rs.getInt("subject_id"));
 				subjectDTO.setSubjectName(rs.getString("subject_name"));
@@ -324,7 +343,7 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 	public List<CourseDTO> getAllCourse(int pageIndex, int totalRecords) {
 		String query = "";
 		if (pageIndex == 0 && totalRecords == 0)
-			query = env.getProperty("fetchCourseMasterQuery") + " where cm.active_status=1";
+			query = env.getProperty("fetchCourseMasterQuery") + " where com.active_status=1";
 		else
 			query = env.getProperty("fetchCourseMasterQuery") + "  limit " + (pageIndex * totalRecords) + " , "
 					+ totalRecords;
@@ -626,6 +645,22 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 			public SubSubjectDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 				SubSubjectDTO subSubjectDTO = new SubSubjectDTO();
 				SubjectDTO subjectDTO = new SubjectDTO();
+				ClassDTO classDTO = new ClassDTO();
+				classDTO.setClassId(rs.getLong("class_id"));
+				classDTO.setClassName(rs.getString("class_name"));
+				CourseDTO courseDTO = new CourseDTO();
+				courseDTO.setCourseId(rs.getLong("course_id"));
+				courseDTO.setCourseName(rs.getString("course_name"));
+				DivisionDTO divisionDTO = new DivisionDTO();
+				divisionDTO.setDivisionId(rs.getLong("division_id"));
+				divisionDTO.setDivisionName(rs.getString("division_name"));
+				divisionDTO.setCourseDTO(courseDTO);
+				subjectDTO.setCourseDTO(courseDTO);
+				subjectDTO.setDivisionDTO(divisionDTO);
+				subjectDTO.setClassDTO(classDTO);
+				subSubjectDTO.setCourseDTO(courseDTO);
+				subSubjectDTO.setDivisionDTO(divisionDTO);
+				subSubjectDTO.setClassDTO(classDTO);
 				subjectDTO.setSubjectId(rs.getLong("subject_id"));
 				subjectDTO.setSubjectName(rs.getString("subject_name"));
 				subjectDTO.setSubjectCode(rs.getString("subject_code"));
@@ -682,18 +717,21 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 	public int saveSubSubject(SubSubjectCreateDTO subSubjectCreateDTO) throws SQLException {
 		String saveSubSubjectMasterQuery = env.getProperty("saveSubSubjectQuery");
 		return jdbcTemplate.update(saveSubSubjectMasterQuery,
-				new Object[] { subSubjectCreateDTO.getSubjectId(), subSubjectCreateDTO.getSubSubjectCode(),
-						subSubjectCreateDTO.getSubSubjectName(), subSubjectCreateDTO.getUserId() });
+				new Object[] { subSubjectCreateDTO.getCourseId(), subSubjectCreateDTO.getDivisionId(),
+						subSubjectCreateDTO.getClassId(), subSubjectCreateDTO.getSubjectId(),
+						subSubjectCreateDTO.getSubSubjectCode(), subSubjectCreateDTO.getSubSubjectName(),
+						subSubjectCreateDTO.getUserId() });
 	}
 
 	@Override
 	@CacheEvict(value = "allSubSubjects", allEntries = true)
 	public int updateSubSubject(SubSubjectModifyDTO subSubjectModifyDTO) throws SQLException {
 		String updateSubSubjectMasterQuery = env.getProperty("updateSubSubjectQuery");
-		return jdbcTemplate.update(updateSubSubjectMasterQuery, subSubjectModifyDTO.getSubjectId(),
-				subSubjectModifyDTO.getSubSubjectCode(), subSubjectModifyDTO.getSubSubjectName(),
-				subSubjectModifyDTO.getUserId(), CommonUtility.getCurrentDateTime(),
-				subSubjectModifyDTO.getSubSubjectId());
+		return jdbcTemplate.update(updateSubSubjectMasterQuery, subSubjectModifyDTO.getCourseId(),
+				subSubjectModifyDTO.getDivisionId(), subSubjectModifyDTO.getClassId(),
+				subSubjectModifyDTO.getSubjectId(), subSubjectModifyDTO.getSubSubjectCode(),
+				subSubjectModifyDTO.getSubSubjectName(), subSubjectModifyDTO.getUserId(),
+				CommonUtility.getCurrentDateTime(), subSubjectModifyDTO.getSubSubjectId());
 	}
 
 	@Override
@@ -714,6 +752,19 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 			@Override
 			public TopicDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 				TopicDTO topicDTO = new TopicDTO();
+				ClassDTO classDTO = new ClassDTO();
+				classDTO.setClassId(rs.getLong("class_id"));
+				classDTO.setClassName(rs.getString("class_name"));
+				CourseDTO courseDTO = new CourseDTO();
+				courseDTO.setCourseId(rs.getLong("course_id"));
+				courseDTO.setCourseName(rs.getString("course_name"));
+				DivisionDTO divisionDTO = new DivisionDTO();
+				divisionDTO.setDivisionId(rs.getLong("division_id"));
+				divisionDTO.setDivisionName(rs.getString("division_name"));
+				divisionDTO.setCourseDTO(courseDTO);
+				topicDTO.setCourseDTO(courseDTO);
+				topicDTO.setDivisionDTO(divisionDTO);
+				topicDTO.setClassDTO(classDTO);
 				SubSubjectDTO subSubjectDTO = new SubSubjectDTO();
 				subSubjectDTO.setSubSubjectId(rs.getLong("sub_subject_id"));
 				subSubjectDTO.setSubSubjectCode(rs.getString("sub_subject_code"));
@@ -751,12 +802,28 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 				if (key.equals("subjectId")) {
 					query.append(" AND tm.subject_id =").append(value);
 				}
+				if (key.equals("subSubjectId")) {
+					query.append(" AND tm.sub_subject_id =").append(value);
+				}
 			});
 		}
 		return jdbcTemplate.query(query.toString(), new RowMapper<TopicDTO>() {
 			@Override
 			public TopicDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
 				TopicDTO topicDTO = new TopicDTO();
+				ClassDTO classDTO = new ClassDTO();
+				classDTO.setClassId(rs.getLong("class_id"));
+				classDTO.setClassName(rs.getString("class_name"));
+				CourseDTO courseDTO = new CourseDTO();
+				courseDTO.setCourseId(rs.getLong("course_id"));
+				courseDTO.setCourseName(rs.getString("course_name"));
+				DivisionDTO divisionDTO = new DivisionDTO();
+				divisionDTO.setDivisionId(rs.getLong("division_id"));
+				divisionDTO.setDivisionName(rs.getString("division_name"));
+				divisionDTO.setCourseDTO(courseDTO);
+				topicDTO.setCourseDTO(courseDTO);
+				topicDTO.setDivisionDTO(divisionDTO);
+				topicDTO.setClassDTO(classDTO);
 				SubSubjectDTO subSubjectDTO = new SubSubjectDTO();
 				subSubjectDTO.setSubSubjectId(rs.getLong("sub_subject_id"));
 				subSubjectDTO.setSubSubjectCode(rs.getString("sub_subject_code"));
@@ -797,7 +864,8 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 	public int saveTopic(TopicCreateDTO topicCreateDTO) throws SQLException {
 		String saveTopicMasterQuery = env.getProperty("saveTopicQuery");
 		return jdbcTemplate.update(saveTopicMasterQuery,
-				new Object[] { topicCreateDTO.getSubjectId(), topicCreateDTO.getSubSubjectId(),
+				new Object[] { topicCreateDTO.getCourseId(), topicCreateDTO.getDivisionId(),
+						topicCreateDTO.getClassId(), topicCreateDTO.getSubjectId(), topicCreateDTO.getSubSubjectId(),
 						topicCreateDTO.getTopicCode(), topicCreateDTO.getTopicName(),
 						topicCreateDTO.getMaxNumberofQuestions(), topicCreateDTO.getUserId() });
 	}
@@ -806,9 +874,10 @@ public class IMasterServiceDaoImpl implements IMasterServiceDao {
 	@CacheEvict(value = "allTopics", allEntries = true)
 	public int updateTopic(TopicModifyDTO topicModifyDTO) throws SQLException {
 		String updateTopicMasterQuery = env.getProperty("updateTopicQuery");
-		return jdbcTemplate.update(updateTopicMasterQuery, topicModifyDTO.getTopicCode(), topicModifyDTO.getTopicName(),
-				topicModifyDTO.getMaxNumberofQuestions(), topicModifyDTO.getUserId(),
-				CommonUtility.getCurrentDateTime(), topicModifyDTO.getTopicId());
+		return jdbcTemplate.update(updateTopicMasterQuery, topicModifyDTO.getCourseId(), topicModifyDTO.getDivisionId(),
+				topicModifyDTO.getClassId(), topicModifyDTO.getSubjectId(), topicModifyDTO.getSubSubjectId(),
+				topicModifyDTO.getTopicCode(), topicModifyDTO.getTopicName(), topicModifyDTO.getMaxNumberofQuestions(),
+				topicModifyDTO.getUserId(), CommonUtility.getCurrentDateTime(), topicModifyDTO.getTopicId());
 	}
 
 	@Override
