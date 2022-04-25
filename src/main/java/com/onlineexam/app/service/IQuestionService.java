@@ -8,6 +8,7 @@ import com.onlineexam.app.dto.request.question.QuestionModifyDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperCreateDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperDeleteDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperModifyDTO;
+import com.onlineexam.app.dto.request.question.QuestionSetDTO;
 import com.onlineexam.app.dto.request.question.SubSetCreateDTO;
 import com.onlineexam.app.dto.request.question.SubSetDeleteDTO;
 import com.onlineexam.app.dto.request.question.SubSetModifyDTO;
@@ -23,6 +24,14 @@ public interface IQuestionService {
 	ServiceResponseDTO deleteQuestions(QuestionDeleteDTO questionDeleteDTO);
 
 	ServiceResponseDTO getAllQuestionPaper(int pageIndex, int totalNumberOfRecords);
+	
+	ServiceResponseDTO getAllQuestionPaperById(long questionPaperId, long subjectId);
+	
+	ServiceResponseDTO getAllQuestionSetByPaperId(long questionPaperId);
+	
+	ServiceResponseDTO getAllQuestionPaperBySubjectId(long subjectId , String questionYear);
+	
+	ServiceResponseDTO getAllQuestionPaperBySet(QuestionSetDTO questionSetDTO);
 
 	ServiceResponseDTO saveQuestionPaper(QuestionPaperCreateDTO questionPaperCreateDTO);
 

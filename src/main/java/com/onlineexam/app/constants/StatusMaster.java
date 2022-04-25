@@ -18,7 +18,8 @@ public enum StatusMaster {
 	STUDENTREADYEXIST(219, "Student Already Exist"),
 	SUBSUBJECTREADYEXIST(218, "Sub Subject Already Exist"),
 	TOPICREADYEXIST(221, "Topic Already Exist"),
-	QUESTIONREADYEXIST(222, "Question Already Exist");
+	QUESTIONREADYEXIST(222, "Question Already Exist"),
+	EXAMREADYEXIST(222, "Exam Already Exist");
 
 	private long responseCode;
 	private String responseMessage;

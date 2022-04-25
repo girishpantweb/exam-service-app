@@ -19,6 +19,7 @@ import com.onlineexam.app.dto.request.question.QuestionModifyDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperCreateDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperDeleteDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperModifyDTO;
+import com.onlineexam.app.dto.request.question.QuestionSetDTO;
 import com.onlineexam.app.service.IQuestionService;
 
 @RestController
@@ -66,11 +67,23 @@ public class QuestionController {
 		return questionService.getAllQuestionPaper(pageIndex, totalRecords);
 	}
 
+	@GetMapping(value = URLConstants.FETCH_QUESTION_PAPER_PAPER_ID)
+	public ServiceResponseDTO fetchQuestionPaperByPaperId(@PathVariable long questionPaperId,
+			@PathVariable long subjectId) {
+		LOGGER.info("Executing  fetchAllQuestionPaper() method of QuestionController");
+		return questionService.getAllQuestionPaperById(questionPaperId, subjectId);
+	}
+
+	@PostMapping(value = URLConstants.FETCH_ALL_QUESTIONS_PAPER_BY_SET)
+	public ServiceResponseDTO fetchAllQuestionPaperBySet(@RequestBody QuestionSetDTO questionSetDTO) {
+		LOGGER.info("Executing  fetchAllQuestionPaperBySet() method of QuestionController");
+		return questionService.getAllQuestionPaperBySet(questionSetDTO);
+	}
+
 	@GetMapping(value = URLConstants.FETCH_ALL_QUESTIONS_PAPER_BY_FILTER)
-	public ServiceResponseDTO fetchAllQuestionPaperByFilter(@PathVariable int pageIndex,
-			@PathVariable int totalRecords) {
+	public ServiceResponseDTO fetchAllQuestionPaperByFilter(@PathVariable long subjectId, @PathVariable String questionYear) {
 		LOGGER.info("Executing  fetchAllQuestionPaperByFilter() method of QuestionController");
-		return questionService.getAllQuestionPaper(pageIndex, totalRecords);
+		return questionService.getAllQuestionPaperBySubjectId(subjectId, questionYear);
 	}
 
 	@PostMapping(value = URLConstants.SAVES_QUESTIONS_PAPER)
@@ -89,6 +102,12 @@ public class QuestionController {
 	public ServiceResponseDTO deleteQuestionsPaperMaster(@RequestBody QuestionPaperDeleteDTO questionDeleteDTO) {
 		LOGGER.info("Executing  deleteQuestionsPaperMaster() method of QuestionController");
 		return questionService.deleteQuestionPaper(questionDeleteDTO);
+	}
+
+	@GetMapping(value = URLConstants.FETCH_ALL_QUESTIONS_SET_BY_PAPER_ID)
+	public ServiceResponseDTO fetchAllQuestionSetByPaperId(@PathVariable long questionPaperId) {
+		LOGGER.info("Executing  fetchAllQuestionPaperByFilter() method of QuestionController");
+		return questionService.getAllQuestionSetByPaperId(questionPaperId);
 	}
 
 }

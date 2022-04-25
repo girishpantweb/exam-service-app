@@ -1,26 +1,17 @@
-package com.onlineexam.app.dto.request.student;
+package com.onlineexam.app.dto.request.exam;
 
-public class StudentDeleteDTO {
+public class ExamDeleteDTO {
 
-	private long studentId;
-	private long loginId;
+	private long examId;
 	private int activeStatus;
 	private int userId;
 
-	public long getStudentId() {
-		return studentId;
+	public long getExamId() {
+		return examId;
 	}
 
-	public void setStudentId(long studentId) {
-		this.studentId = studentId;
-	}
-
-	public long getLoginId() {
-		return loginId;
-	}
-
-	public void setLoginId(long loginId) {
-		this.loginId = loginId;
+	public void setExamId(long examId) {
+		this.examId = examId;
 	}
 
 	public int getActiveStatus() {
@@ -42,10 +33,8 @@ public class StudentDeleteDTO {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("StudentDeleteDTO [studentId=");
-		builder.append(studentId);
-		builder.append(", loginId=");
-		builder.append(loginId);
+		builder.append("ExamDeleteDTO [examId=");
+		builder.append(examId);
 		builder.append(", activeStatus=");
 		builder.append(activeStatus);
 		builder.append(", userId=");

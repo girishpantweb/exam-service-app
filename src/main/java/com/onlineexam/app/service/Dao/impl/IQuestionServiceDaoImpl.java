@@ -132,6 +132,135 @@ public class IQuestionServiceDaoImpl implements IQuestionServiceDao {
 			}
 		});
 	}
+	
+	@Override
+	public Map<Long, List<QuestionDTO>> getAllQuestionsBySubjectId(int pageIndex, int totalRecords,
+			String subjectId) {
+		String query = "";
+		if (pageIndex == 0 && totalRecords == 0)
+			query = env.getProperty("fetchQuestionMasterQuery") + " where qm.subject_id = " + subjectId
+					+ " AND qm.active_status=1";
+		else
+			query = env.getProperty("fetchQuestionMasterQuery") + "  where qm.subject_id = " + subjectId
+					+ " AND qm.active_status=1 limit " + (pageIndex * totalRecords) + " , " + totalRecords;
+		Map<Long, List<QuestionDTO>> mapData = new HashedMap<Long, List<QuestionDTO>>();
+		return jdbcTemplate.query(query, new ResultSetExtractor<Map<Long, List<QuestionDTO>>>() {
+			@Override
+			public Map<Long, List<QuestionDTO>> extractData(ResultSet rs) throws SQLException, DataAccessException {
+				while (rs.next()) {
+					QuestionDTO questionDTO = new QuestionDTO();
+					questionDTO.setQuestionId(rs.getLong("question_id"));
+					List<QuestionDTO> dataList = null;
+					if (mapData.get(rs.getLong("subject_id")) != null) {
+						dataList = mapData.get(rs.getLong("subject_id"));
+					} else {
+						dataList = new ArrayList<QuestionDTO>();
+					}
+					dataList.add(questionDTO);
+					mapData.put(rs.getLong("subject_id"), dataList);
+				}
+				return mapData;
+			}
+		});
+	}
+
+	@Override
+	public List<QuestionDTO> getAllQuestionsByFilter(int pageIndex, int totalRecords, Map<String, String> filters) {
+		StringBuilder query = new StringBuilder();
+		if (filters == null) {
+			if (pageIndex == 0 && totalRecords == 0)
+				query.append(env.getProperty("fetchQuestionMasterQuery")).append(" where qm.active_status=1");
+			else
+				query.append(env.getProperty("fetchQuestionMasterQuery"))
+						.append("  limit " + (pageIndex * totalRecords) + " , ").append(totalRecords);
+		} else {
+			query.append(env.getProperty("fetchQuestionMasterQuery")).append(" where qm.active_status=1 ");
+			filters.forEach((key, value) -> {
+				if (key.equals("subjectId")) {
+					query.append(" and qm.subject_id =").append(value);
+				}
+			});
+		}
+		return jdbcTemplate.query(query.toString(), new RowMapper<QuestionDTO>() {
+			@Override
+			public QuestionDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				QuestionDTO questionDTO = new QuestionDTO();
+				ClassDTO classDTO = new ClassDTO();
+				classDTO.setClassId(rs.getLong("class_id"));
+				classDTO.setClassName(rs.getString("class_name"));
+				CourseDTO courseDTO = new CourseDTO();
+				courseDTO.setCourseId(rs.getLong("course_id"));
+				courseDTO.setCourseName(rs.getString("course_name"));
+				DivisionDTO divisionDTO = new DivisionDTO();
+				divisionDTO.setDivisionId(rs.getLong("division_id"));
+				divisionDTO.setDivisionName(rs.getString("division_name"));
+				SubjectDTO subjectDTO = new SubjectDTO();
+				subjectDTO.setSubjectId(rs.getLong("subject_id"));
+				subjectDTO.setSubjectCode(rs.getString("subject_code"));
+				subjectDTO.setSubjectName(rs.getString("subject_name"));
+				SubSubjectDTO subSubjectDTO = new SubSubjectDTO();
+				subSubjectDTO.setSubSubjectId(rs.getLong("sub_subject_id"));
+				subSubjectDTO.setSubSubjectCode(rs.getString("sub_subject_code"));
+				subSubjectDTO.setSubSubjectName(rs.getString("sub_subject_name"));
+				subSubjectDTO.setSubjectDTO(subjectDTO);
+				TopicDTO topicDTO = new TopicDTO();
+				topicDTO.setTopicId(rs.getLong("topic_id"));
+				topicDTO.setTopicCode(rs.getString("topic_name"));
+				topicDTO.setTopicName(rs.getString("topic_code"));
+				topicDTO.setSubjectDTO(subjectDTO);
+				topicDTO.setSubSubjectDTO(subSubjectDTO);
+				questionDTO.setCourseDTO(courseDTO);
+				questionDTO.setDivisionDTO(divisionDTO);
+				questionDTO.setClassDTO(classDTO);
+				questionDTO.setSubject(subjectDTO);
+				questionDTO.setSubSubject(subSubjectDTO);
+				questionDTO.setTopic(topicDTO);
+				questionDTO.setQuestionId(rs.getLong("question_id"));
+				questionDTO.setQuestion(rs.getString("question"));
+				questionDTO.setOption1(rs.getString("option1"));
+				questionDTO.setOption2(rs.getString("option2"));
+				questionDTO.setOption3(rs.getString("option3"));
+				questionDTO.setOption4(rs.getString("option4"));
+				questionDTO.setAnswerKey(rs.getString("answer_key"));
+				questionDTO.setDescription(rs.getString("description"));
+				DifficultyMaster df = DifficultyMaster.getDicultyFromId(rs.getInt("difficulty_level"));
+				DifficultyDTO difficultyDTO = new DifficultyDTO();
+				difficultyDTO.setId(df.getId());
+				difficultyDTO.setValue(df.getValue());
+				questionDTO.setDifficultyDTO(difficultyDTO);
+				questionDTO.setUserName(rs.getString("user_name"));
+				questionDTO.setActiveStatus(rs.getInt("active_status"));
+				return questionDTO;
+			}
+		});
+	}
+
+	@Override
+	public List<QuestionDTO> getAllQuestionIdByFilter(int pageIndex, int totalRecords, Map<String, String> filters) {
+		StringBuilder query = new StringBuilder();
+		if (filters == null) {
+			if (pageIndex == 0 && totalRecords == 0)
+				query.append(env.getProperty("fetchQuestionMasterQuery")).append(" where qm.active_status=1");
+			else
+				query.append(env.getProperty("fetchQuestionMasterQuery"))
+						.append("  limit " + (pageIndex * totalRecords) + " , ").append(totalRecords);
+		} else {
+			query.append(env.getProperty("fetchQuestionMasterQuery")).append(" where qm.active_status=1 ");
+			filters.forEach((key, value) -> {
+				if (key.equals("subjectId")) {
+					query.append(" and qm.subject_id =").append(value);
+				}
+			});
+		}
+		return jdbcTemplate.query(query.toString(), new RowMapper<QuestionDTO>() {
+			@Override
+			public QuestionDTO mapRow(ResultSet rs, int rowNum) throws SQLException {
+				QuestionDTO questionDTO = new QuestionDTO();
+				questionDTO.setQuestionId(rs.getLong("question_id"));
+				return questionDTO;
+			}
+		});
+	}
 
 	@Override
 	public Integer getTotalQuestions() {

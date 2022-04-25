@@ -14,6 +14,8 @@ public interface IQuestionServiceDao {
 
 	Map<Long, List<QuestionDTO>> getAllQuestionsBySubSubjectId(int pageIndex, int totalRecords, String subSubjectId);
 
+	Map<Long, List<QuestionDTO>> getAllQuestionsBySubjectId(int pageIndex, int totalRecords, String subSubjectId);
+
 	Integer getTotalQuestions();
 
 	Integer findQuestionsCountByQuestionsName(String questionName) throws SQLException;
@@ -25,5 +27,9 @@ public interface IQuestionServiceDao {
 	int updateQuestion(QuestionModifyDTO questionModifyDTO) throws SQLException;
 
 	int deleteQuestion(QuestionDeleteDTO questionDeleteDTO) throws SQLException;
+
+	List<QuestionDTO> getAllQuestionsByFilter(int pageIndex, int totalRecords, Map<String, String> filters);
+
+	List<QuestionDTO> getAllQuestionIdByFilter(int pageIndex, int totalRecords, Map<String, String> filters);
 
 }

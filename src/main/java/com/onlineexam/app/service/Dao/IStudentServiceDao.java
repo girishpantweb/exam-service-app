@@ -11,6 +11,10 @@ public interface IStudentServiceDao {
 
 	List<StudentDTO> getAllStudent(int pageIndex, int totalRecords);
 
+	StudentDTO getAllStudentByUserId(long userId);
+
+	List<StudentDTO> getAllStudentByStudentId(long studentId);
+
 	Integer getTotalStudentCount();
 
 	Integer findStudentCountByRoleName(String studentName) throws SQLException;

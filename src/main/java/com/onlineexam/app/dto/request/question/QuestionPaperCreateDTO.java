@@ -6,9 +6,11 @@ import java.util.List;
 public class QuestionPaperCreateDTO {
 
 	private String questionYear;
-	private long classId;
+	private String questionPaperCode;
 	private long courseId;
+	private long divisionId;
 	private long subjectId;
+	private long classId;
 	private int noOfSet;
 	private List<QuestionSubSubjectCreateDTO> questionSubSubjectCreateDTO;
 	private long userId;
@@ -22,12 +24,12 @@ public class QuestionPaperCreateDTO {
 		this.questionYear = questionYear;
 	}
 
-	public long getClassId() {
-		return classId;
+	public String getQuestionPaperCode() {
+		return questionPaperCode;
 	}
 
-	public void setClassId(long classId) {
-		this.classId = classId;
+	public void setQuestionPaperCode(String questionPaperCode) {
+		this.questionPaperCode = questionPaperCode;
 	}
 
 	public long getCourseId() {
@@ -38,12 +40,28 @@ public class QuestionPaperCreateDTO {
 		this.courseId = courseId;
 	}
 
+	public long getDivisionId() {
+		return divisionId;
+	}
+
+	public void setDivisionId(long divisionId) {
+		this.divisionId = divisionId;
+	}
+
 	public long getSubjectId() {
 		return subjectId;
 	}
 
 	public void setSubjectId(long subjectId) {
 		this.subjectId = subjectId;
+	}
+
+	public long getClassId() {
+		return classId;
+	}
+
+	public void setClassId(long classId) {
+		this.classId = classId;
 	}
 
 	public int getNoOfSet() {
@@ -83,12 +101,16 @@ public class QuestionPaperCreateDTO {
 		StringBuilder builder = new StringBuilder();
 		builder.append("QuestionPaperCreateDTO [questionYear=");
 		builder.append(questionYear);
-		builder.append(", classId=");
-		builder.append(classId);
+		builder.append(", questionPaperCode=");
+		builder.append(questionPaperCode);
 		builder.append(", courseId=");
 		builder.append(courseId);
+		builder.append(", divisionId=");
+		builder.append(divisionId);
 		builder.append(", subjectId=");
 		builder.append(subjectId);
+		builder.append(", classId=");
+		builder.append(classId);
 		builder.append(", noOfSet=");
 		builder.append(noOfSet);
 		builder.append(", questionSubSubjectCreateDTO=");

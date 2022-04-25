@@ -7,16 +7,28 @@ import com.onlineexam.app.dto.request.question.QuestionPaperCreateDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperDeleteDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperModifyDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperSetCreateDTO;
+import com.onlineexam.app.dto.request.question.QuestionSetDTO;
 import com.onlineexam.app.dto.request.question.SubSetCreateDTO;
 import com.onlineexam.app.dto.request.question.SubSetDeleteDTO;
 import com.onlineexam.app.dto.request.question.SubSetModifyDTO;
+import com.onlineexam.app.dto.response.KeyValueDTO;
+import com.onlineexam.app.dto.response.QuestionPaperSetDTO;
+import com.onlineexam.app.dto.response.question.QuestionPaperDTO;
 
 public interface IQuestionPaperServiceDao {
 
-	//List<QuestionDTO> getAllQuestionPaper(int pageIndex, int totalRecords);
-
 	Integer getTotalQuestionPaper();
 
+	List<QuestionPaperDTO> getAllQuestionPaper(int pageIndex, int totalRecords);
+	
+	QuestionPaperDTO getAllQuestionPaperById(long questionPaperId, long subjectId);
+	
+	List<QuestionPaperSetDTO> getAllQuestionPaperBySet(QuestionSetDTO questionSetDTO);
+	
+	List<QuestionPaperDTO> getAllQuestionPaperBySubjectId(long subjectId , String questionYear);
+	
+	List<KeyValueDTO> getAllQuestionSetByPaperId(long questionPaperId);
+	
 	long saveQuestionPaper(QuestionPaperCreateDTO questionPaperCreateDTO) throws SQLException;
 
 	int[] saveAllQuestionPaper(List<Object> questionList);

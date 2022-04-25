@@ -5,7 +5,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class UserMasterCreateDTO {
 
@@ -24,7 +23,6 @@ public class UserMasterCreateDTO {
 	@Min(value = 1, message = "Role is required")
 	private int roleId;
 	private long createdBy;
-	@JsonIgnore
 	private String password;
 
 	public String getUserName() {

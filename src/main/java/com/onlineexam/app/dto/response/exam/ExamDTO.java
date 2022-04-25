@@ -1,24 +1,24 @@
-package com.onlineexam.app.dto.response.question;
-
-import java.util.List;
+package com.onlineexam.app.dto.response.exam;
 
 import com.onlineexam.app.dto.response.master.ClassDTO;
 import com.onlineexam.app.dto.response.master.CourseDTO;
 import com.onlineexam.app.dto.response.master.DivisionDTO;
 import com.onlineexam.app.dto.response.master.SubjectDTO;
+import com.onlineexam.app.dto.response.question.QuestionPaperDTO;
 
-public class QuestionPaperDTO {
+public class ExamDTO {
 
 	private long sno;
-	private long questionPaperId;
-	private String questionYear;
-	private String questionPaperCode;
+	private long examId;
+	private String examCode;
+	private String examYear;
 	private CourseDTO courseDTO;
 	private DivisionDTO divisionDTO;
 	private ClassDTO classDTO;
 	private SubjectDTO subjectDTO;
-	private List<QuestionSubSubjectDTO> questionSubSubjectDTO;
-	private int noofSet;
+	private QuestionPaperDTO questionPaperDTO;
+	private String examDate;
+	private String examTime;
 	private String userName;
 	private int activeStatus;
 
@@ -30,28 +30,28 @@ public class QuestionPaperDTO {
 		this.sno = sno;
 	}
 
-	public long getQuestionPaperId() {
-		return questionPaperId;
+	public long getExamId() {
+		return examId;
 	}
 
-	public void setQuestionPaperId(long questionPaperId) {
-		this.questionPaperId = questionPaperId;
+	public void setExamId(long examId) {
+		this.examId = examId;
 	}
 
-	public String getQuestionYear() {
-		return questionYear;
+	public String getExamCode() {
+		return examCode;
 	}
 
-	public void setQuestionYear(String questionYear) {
-		this.questionYear = questionYear;
+	public void setExamCode(String examCode) {
+		this.examCode = examCode;
 	}
 
-	public String getQuestionPaperCode() {
-		return questionPaperCode;
+	public String getExamYear() {
+		return examYear;
 	}
 
-	public void setQuestionPaperCode(String questionPaperCode) {
-		this.questionPaperCode = questionPaperCode;
+	public void setExamYear(String examYear) {
+		this.examYear = examYear;
 	}
 
 	public CourseDTO getCourseDTO() {
@@ -86,20 +86,28 @@ public class QuestionPaperDTO {
 		this.subjectDTO = subjectDTO;
 	}
 
-	public List<QuestionSubSubjectDTO> getQuestionSubSubjectDTO() {
-		return questionSubSubjectDTO;
+	public QuestionPaperDTO getQuestionPaperDTO() {
+		return questionPaperDTO;
 	}
 
-	public void setQuestionSubSubjectDTO(List<QuestionSubSubjectDTO> questionSubSubjectDTO) {
-		this.questionSubSubjectDTO = questionSubSubjectDTO;
+	public void setQuestionPaperDTO(QuestionPaperDTO questionPaperDTO) {
+		this.questionPaperDTO = questionPaperDTO;
 	}
 
-	public int getNoofSet() {
-		return noofSet;
+	public String getExamDate() {
+		return examDate;
 	}
 
-	public void setNoofSet(int noofSet) {
-		this.noofSet = noofSet;
+	public void setExamDate(String examDate) {
+		this.examDate = examDate;
+	}
+
+	public String getExamTime() {
+		return examTime;
+	}
+
+	public void setExamTime(String examTime) {
+		this.examTime = examTime;
 	}
 
 	public String getUserName() {
@@ -121,14 +129,14 @@ public class QuestionPaperDTO {
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
-		builder.append("QuestionPaperDTO [sno=");
+		builder.append("ExamDTO [sno=");
 		builder.append(sno);
-		builder.append(", questionPaperId=");
-		builder.append(questionPaperId);
-		builder.append(", questionYear=");
-		builder.append(questionYear);
-		builder.append(", questionPaperCode=");
-		builder.append(questionPaperCode);
+		builder.append(", examId=");
+		builder.append(examId);
+		builder.append(", examCode=");
+		builder.append(examCode);
+		builder.append(", examYear=");
+		builder.append(examYear);
 		builder.append(", courseDTO=");
 		builder.append(courseDTO);
 		builder.append(", divisionDTO=");
@@ -137,10 +145,12 @@ public class QuestionPaperDTO {
 		builder.append(classDTO);
 		builder.append(", subjectDTO=");
 		builder.append(subjectDTO);
-		builder.append(", questionSubSubjectDTO=");
-		builder.append(questionSubSubjectDTO);
-		builder.append(", noofSet=");
-		builder.append(noofSet);
+		builder.append(", questionPaperDTO=");
+		builder.append(questionPaperDTO);
+		builder.append(", examDate=");
+		builder.append(examDate);
+		builder.append(", examTime=");
+		builder.append(examTime);
 		builder.append(", userName=");
 		builder.append(userName);
 		builder.append(", activeStatus=");

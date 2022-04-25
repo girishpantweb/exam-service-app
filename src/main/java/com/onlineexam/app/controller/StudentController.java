@@ -28,9 +28,16 @@ public class StudentController {
 	private IStudentService iStudentService;
 
 	@GetMapping(value = URLConstants.FETCH_ALL_STUDENTS)
-	public ServiceResponseDTO fetchAllClasses(@PathVariable int pageIndex, @PathVariable int totalRecords) {
+	public ServiceResponseDTO fetchAllStudents(@PathVariable int pageIndex, @PathVariable int totalRecords) {
 		LOGGER.info("Executing  fetchAllClasses() method of StudentController");
 		return iStudentService.getAllStudents(pageIndex, totalRecords);
+	}
+
+	@GetMapping(value = URLConstants.FETCH_STUDENTS_BY_STUDENT_ID)
+	public ServiceResponseDTO fetchStudentByStudentId(@PathVariable int pageIndex, @PathVariable int totalRecords,
+			@PathVariable long studentId) {
+		LOGGER.info("Executing  fetchAllClasses() method of StudentController");
+		return iStudentService.getAllStudentByStudentId(pageIndex, totalRecords, studentId);
 	}
 
 	@PostMapping(value = URLConstants.SAVES_STUDENTS)

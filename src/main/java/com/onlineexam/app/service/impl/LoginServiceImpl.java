@@ -25,8 +25,10 @@ import com.onlineexam.app.dto.ChangePasswordDTO;
 import com.onlineexam.app.dto.RoleAuthorizationDTO;
 import com.onlineexam.app.dto.ServiceResponseDTO;
 import com.onlineexam.app.dto.UserMasterDTO;
+import com.onlineexam.app.dto.response.student.StudentDTO;
 import com.onlineexam.app.pojo.CustomReponseStatus;
 import com.onlineexam.app.service.ILoginService;
+import com.onlineexam.app.service.Dao.IStudentServiceDao;
 import com.onlineexam.app.service.Dao.IUserMasterServiceDAO;
 import com.onlineexam.app.utils.CommonUtility;
 
@@ -45,6 +47,9 @@ public class LoginServiceImpl implements ILoginService {
 
 	@Autowired
 	private IUserMasterServiceDAO iUserMasterServiceDAO;
+
+	@Autowired
+	private IStudentServiceDao studentServiceDao;
 
 	@Autowired
 	private Environment env;
@@ -81,6 +86,11 @@ public class LoginServiceImpl implements ILoginService {
 									roleAuthorizationQuery, new Object[] { userMasterDTO.getRoleId() },
 									new int[] { Types.BIGINT },
 									new BeanPropertyRowMapper<RoleAuthorizationDTO>(RoleAuthorizationDTO.class));
+							if (userMasterDTO.getRoleId() == 3) {
+								StudentDTO studentDTO = studentServiceDao
+										.getAllStudentByUserId(userMasterDTO.getUserId());
+								userMasterDTO.setStudentDTO(studentDTO);
+							}
 						}
 						customReponseStatus = new CustomReponseStatus(StatusMaster.SUCCESS.getResponseCode(),
 								StatusMaster.SUCCESS.getResponseMessage());

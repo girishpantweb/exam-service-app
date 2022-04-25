@@ -25,10 +25,14 @@ import com.onlineexam.app.dto.request.question.QuestionPaperCreateDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperDeleteDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperModifyDTO;
 import com.onlineexam.app.dto.request.question.QuestionPaperSetCreateDTO;
+import com.onlineexam.app.dto.request.question.QuestionSetDTO;
 import com.onlineexam.app.dto.request.question.SubSetCreateDTO;
 import com.onlineexam.app.dto.request.question.SubSetDeleteDTO;
 import com.onlineexam.app.dto.request.question.SubSetModifyDTO;
+import com.onlineexam.app.dto.response.KeyValueDTO;
+import com.onlineexam.app.dto.response.QuestionPaperSetDTO;
 import com.onlineexam.app.dto.response.question.QuestionDTO;
+import com.onlineexam.app.dto.response.question.QuestionPaperDTO;
 import com.onlineexam.app.pojo.CustomReponseStatus;
 import com.onlineexam.app.service.IQuestionService;
 import com.onlineexam.app.service.Dao.IQuestionPaperServiceDao;
@@ -175,8 +179,96 @@ public class QuestionServiceImpl implements IQuestionService {
 
 	@Override
 	public ServiceResponseDTO getAllQuestionPaper(int pageIndex, int totalNumberOfRecords) {
-		// TODO Auto-generated method stub
-		return null;
+		LOGGER.info("Executing  getAllQuestions() method of QuestionServiceImpl");
+		LinkedHashMap<Object, Object> response = new LinkedHashMap<>();
+		ServiceResponseDTO serviceResponse = new ServiceResponseDTO();
+		CustomReponseStatus customReponseStatus = null;
+		List<QuestionPaperDTO> dataList = null;
+		Integer count = 0;
+		int slNo[] = { 0 };
+		try {
+			dataList = questionPaperServiceDao.getAllQuestionPaper(pageIndex, totalNumberOfRecords);
+			if (dataList != null && dataList.size() > 0) {
+				dataList.forEach(item -> {
+					slNo[0]++;
+					item.setSno(slNo[0]);
+				});
+			}
+			count = questionServiceDao.getTotalQuestions();
+			customReponseStatus = new CustomReponseStatus(StatusMaster.SUCCESS.getResponseCode(),
+					StatusMaster.SUCCESS.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+			response.put(ResponseKeyValue.QUESTION_DATA_KEY.key(), dataList);
+			response.put(ResponseKeyValue.QUESTION_ALL_DATA_COUNT_KEY.key(), count);
+		} catch (Exception ex) {
+			LOGGER.error("Exception Occur in getAllQuestions {}", ex.getMessage());
+			customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+					StatusMaster.FAILED.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+		} finally {
+			serviceResponse.setServiceResponse(response);
+		}
+		return serviceResponse;
+	}
+
+	@Override
+	public ServiceResponseDTO getAllQuestionPaperById(long questionPaperId, long subjectId) {
+		LOGGER.info("Executing  getAllQuestionPaperById() method of QuestionServiceImpl");
+		LinkedHashMap<Object, Object> response = new LinkedHashMap<>();
+		ServiceResponseDTO serviceResponse = new ServiceResponseDTO();
+		CustomReponseStatus customReponseStatus = null;
+		QuestionPaperDTO dataList = null;
+		Integer count = 0;
+		try {
+			dataList = questionPaperServiceDao.getAllQuestionPaperById(questionPaperId, subjectId);
+			customReponseStatus = new CustomReponseStatus(StatusMaster.SUCCESS.getResponseCode(),
+					StatusMaster.SUCCESS.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+			response.put(ResponseKeyValue.QUESTION_DATA_KEY.key(), dataList);
+			response.put(ResponseKeyValue.QUESTION_ALL_DATA_COUNT_KEY.key(), count);
+		} catch (Exception ex) {
+			LOGGER.error("Exception Occur in getAllQuestionPaperById {}", ex.getMessage());
+			customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+					StatusMaster.FAILED.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+		} finally {
+			serviceResponse.setServiceResponse(response);
+		}
+		return serviceResponse;
+	}
+
+	@Override
+	public ServiceResponseDTO getAllQuestionPaperBySet(QuestionSetDTO questionSetDTO) {
+		LOGGER.info("Executing  getAllQuestionPaperBySet() method of QuestionServiceImpl");
+		LinkedHashMap<Object, Object> response = new LinkedHashMap<>();
+		ServiceResponseDTO serviceResponse = new ServiceResponseDTO();
+		CustomReponseStatus customReponseStatus = null;
+		List<QuestionPaperSetDTO> dataList = null;
+		Integer count = 0;
+		int slNo[] = { 0 };
+		try {
+			dataList = questionPaperServiceDao.getAllQuestionPaperBySet(questionSetDTO);
+			if (dataList != null && dataList.size() > 0) {
+				dataList.forEach(item -> {
+					slNo[0]++;
+					item.setSno(slNo[0]);
+				});
+			}
+			count = questionServiceDao.getTotalQuestions();
+			customReponseStatus = new CustomReponseStatus(StatusMaster.SUCCESS.getResponseCode(),
+					StatusMaster.SUCCESS.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+			response.put(ResponseKeyValue.QUESTION_DATA_KEY.key(), dataList);
+			response.put(ResponseKeyValue.QUESTION_ALL_DATA_COUNT_KEY.key(), count);
+		} catch (Exception ex) {
+			LOGGER.error("Exception Occur in getAllQuestions {}", ex.getMessage());
+			customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+					StatusMaster.FAILED.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+		} finally {
+			serviceResponse.setServiceResponse(response);
+		}
+		return serviceResponse;
 	}
 
 	@Override
@@ -215,22 +307,20 @@ public class QuestionServiceImpl implements IQuestionService {
 	@Async
 	private void createSetsForQuestion(long questionPaperId, QuestionPaperCreateDTO questionPaperCreateDTO)
 			throws SQLException {
-		String subSubjectId = questionPaperCreateDTO.getQuestionSubSubjectCreateDTO().stream()
-				.map(n -> String.valueOf(n.getSubSubjectId())).collect(Collectors.joining(","));
-		Map<Long, List<QuestionDTO>> questionData = questionServiceDao.getAllQuestionsBySubSubjectId(0, 0,
-				subSubjectId);
+		String subjectId = String.valueOf(questionPaperCreateDTO.getSubjectId());
+		long noOfQuestions = questionPaperCreateDTO.getQuestionSubSubjectCreateDTO().stream()
+				.map(x -> x.getNoOfQuestions()).collect(Collectors.summingInt(Integer::intValue));
+		Map<Long, List<QuestionDTO>> questionData = questionServiceDao.getAllQuestionsBySubjectId(0,
+				Integer.valueOf("" + noOfQuestions), subjectId);
 		long noOfSets = questionPaperCreateDTO.getNoOfSet();
 		int i = 1;
 		while (i <= noOfSets) {
 			final int loop = i;
 			List<QuestionPaperSetCreateDTO> finalData = new ArrayList<QuestionPaperSetCreateDTO>();
-			questionPaperCreateDTO.getQuestionSubSubjectCreateDTO().forEach(question -> {
-				List<QuestionDTO> questionDataList = questionData.get(question.getSubSubjectId());
-				if (questionDataList.size() > question.getNoOfQuestions()) {
-					questionDataList = questionDataList.subList(0, question.getNoOfQuestions());
-				}
-				Collections.shuffle(questionDataList,
-						new Random(loop + question.getSubSubjectId() + question.getUserId()));
+			questionData.forEach((key, value) -> {
+				List<QuestionDTO> questionDataList = value;
+				Collections.shuffle(questionDataList, new Random(
+						loop + (questionPaperCreateDTO.getSubjectId() * questionPaperCreateDTO.getUserId())));
 				AtomicInteger counter = new AtomicInteger();
 				questionDataList.stream().forEach(d -> {
 					QuestionPaperSetCreateDTO questionPaperSetCreateDTO = new QuestionPaperSetCreateDTO();
@@ -447,6 +537,64 @@ public class QuestionServiceImpl implements IQuestionService {
 		}
 		response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
 		serviceResponse.setServiceResponse(response);
+		return serviceResponse;
+	}
+
+	@Override
+	public ServiceResponseDTO getAllQuestionSetByPaperId(long questionPaperId) {
+		LOGGER.info("Executing  getAllQuestionSetByPaperId() method of QuestionServiceImpl");
+		LinkedHashMap<Object, Object> response = new LinkedHashMap<>();
+		ServiceResponseDTO serviceResponse = new ServiceResponseDTO();
+		CustomReponseStatus customReponseStatus = null;
+		List<KeyValueDTO> dataList = null;
+		try {
+			dataList = questionPaperServiceDao.getAllQuestionSetByPaperId(questionPaperId);
+			customReponseStatus = new CustomReponseStatus(StatusMaster.SUCCESS.getResponseCode(),
+					StatusMaster.SUCCESS.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+			response.put(ResponseKeyValue.QUESTION_SET_DATA_KEY.key(), dataList);
+		} catch (Exception ex) {
+			LOGGER.error("Exception Occur in getAllQuestionSetByPaperId {}", ex.getMessage());
+			customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+					StatusMaster.FAILED.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+		} finally {
+			serviceResponse.setServiceResponse(response);
+		}
+		return serviceResponse;
+	}
+
+	@Override
+	public ServiceResponseDTO getAllQuestionPaperBySubjectId(long subjectId, String questionYear) {
+		LOGGER.info("Executing  getAllQuestionPaperBySet() method of QuestionServiceImpl");
+		LinkedHashMap<Object, Object> response = new LinkedHashMap<>();
+		ServiceResponseDTO serviceResponse = new ServiceResponseDTO();
+		CustomReponseStatus customReponseStatus = null;
+		List<QuestionPaperDTO> dataList = null;
+		Integer count = 0;
+		int slNo[] = { 0 };
+		try {
+			dataList = questionPaperServiceDao.getAllQuestionPaperBySubjectId(subjectId, questionYear);
+			if (dataList != null && dataList.size() > 0) {
+				dataList.forEach(item -> {
+					slNo[0]++;
+					item.setSno(slNo[0]);
+				});
+			}
+			count = questionServiceDao.getTotalQuestions();
+			customReponseStatus = new CustomReponseStatus(StatusMaster.SUCCESS.getResponseCode(),
+					StatusMaster.SUCCESS.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+			response.put(ResponseKeyValue.QUESTION_DATA_KEY.key(), dataList);
+			response.put(ResponseKeyValue.QUESTION_ALL_DATA_COUNT_KEY.key(), count);
+		} catch (Exception ex) {
+			LOGGER.error("Exception Occur in getAllQuestions {}", ex.getMessage());
+			customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+					StatusMaster.FAILED.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+		} finally {
+			serviceResponse.setServiceResponse(response);
+		}
 		return serviceResponse;
 	}
 }

@@ -1,16 +1,19 @@
 package com.onlineexam.app.dto.request.question;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class QuestionPaperModifyDTO {
 
 	private long questionPaperId;
 	private String questionYear;
+	private String questionPaperCode;
 	private long classId;
 	private long courseId;
+	private long divisionId;
 	private long subjectId;
 	private int noOfSet;
-	private QuestionSubSubjectModifyDTO questionSubSubjectModifyDTO;
+	private List<QuestionSubSubjectModifyDTO> questionSubSubjectModifyDTO;
 	private long userId;
 	private LocalDateTime dateTime;
 
@@ -30,6 +33,14 @@ public class QuestionPaperModifyDTO {
 		this.questionYear = questionYear;
 	}
 
+	public String getQuestionPaperCode() {
+		return questionPaperCode;
+	}
+
+	public void setQuestionPaperCode(String questionPaperCode) {
+		this.questionPaperCode = questionPaperCode;
+	}
+
 	public long getClassId() {
 		return classId;
 	}
@@ -44,6 +55,14 @@ public class QuestionPaperModifyDTO {
 
 	public void setCourseId(long courseId) {
 		this.courseId = courseId;
+	}
+
+	public long getDivisionId() {
+		return divisionId;
+	}
+
+	public void setDivisionId(long divisionId) {
+		this.divisionId = divisionId;
 	}
 
 	public long getSubjectId() {
@@ -62,11 +81,11 @@ public class QuestionPaperModifyDTO {
 		this.noOfSet = noOfSet;
 	}
 
-	public QuestionSubSubjectModifyDTO getQuestionSubSubjectModifyDTO() {
+	public List<QuestionSubSubjectModifyDTO> getQuestionSubSubjectModifyDTO() {
 		return questionSubSubjectModifyDTO;
 	}
 
-	public void setQuestionSubSubjectModifyDTO(QuestionSubSubjectModifyDTO questionSubSubjectModifyDTO) {
+	public void setQuestionSubSubjectModifyDTO(List<QuestionSubSubjectModifyDTO> questionSubSubjectModifyDTO) {
 		this.questionSubSubjectModifyDTO = questionSubSubjectModifyDTO;
 	}
 
@@ -93,10 +112,14 @@ public class QuestionPaperModifyDTO {
 		builder.append(questionPaperId);
 		builder.append(", questionYear=");
 		builder.append(questionYear);
+		builder.append(", questionPaperCode=");
+		builder.append(questionPaperCode);
 		builder.append(", classId=");
 		builder.append(classId);
 		builder.append(", courseId=");
 		builder.append(courseId);
+		builder.append(", divisionId=");
+		builder.append(divisionId);
 		builder.append(", subjectId=");
 		builder.append(subjectId);
 		builder.append(", noOfSet=");

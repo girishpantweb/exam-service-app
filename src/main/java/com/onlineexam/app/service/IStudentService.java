@@ -8,6 +8,8 @@ import com.onlineexam.app.dto.request.student.StudentsCreateDTO;
 public interface IStudentService {
 	
 	ServiceResponseDTO getAllStudents(int pageIndex, int totalNumberOfRecords);
+	
+	ServiceResponseDTO getAllStudentByStudentId(int pageIndex, int totalNumberOfRecords , long studentId);
 
 	ServiceResponseDTO saveStudents(StudentsCreateDTO studentsCreateDTO);
 
