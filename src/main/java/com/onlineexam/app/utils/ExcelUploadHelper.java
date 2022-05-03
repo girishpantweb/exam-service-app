@@ -23,6 +23,9 @@ import org.springframework.stereotype.Service;
 import com.onlineexam.app.constants.DifficultyMaster;
 import com.onlineexam.app.constants.OptionMaster;
 import com.onlineexam.app.dto.request.question.QuestionCreateDTO;
+import com.onlineexam.app.dto.response.master.ClassDTO;
+import com.onlineexam.app.dto.response.master.CourseDTO;
+import com.onlineexam.app.dto.response.master.DivisionDTO;
 import com.onlineexam.app.dto.response.master.SubSubjectDTO;
 import com.onlineexam.app.dto.response.master.SubjectDTO;
 import com.onlineexam.app.dto.response.master.TopicDTO;
@@ -102,14 +105,34 @@ public class ExcelUploadHelper {
 			long userId) {
 		ArrayList<Object> objectList = new ArrayList<Object>();
 		if (fileType.equalsIgnoreCase("question_master")) {
+			List<CourseDTO> courseDTOs = cacheManager.getCourseDataList();
+			List<DivisionDTO> divisionDTO = cacheManager.getDivisionDataList();
+			List<ClassDTO> classDTOs = cacheManager.getClassDataList();
 			List<SubjectDTO> subjectData = cacheManager.getSubjectDataList();
 			List<SubSubjectDTO> subSubjectDTO = cacheManager.getSubSubjectDataList();
 			List<TopicDTO> topicDTOs = cacheManager.getTopicDataList();
+
 			for (Map<String, String> data : excelData) {
 				QuestionCreateDTO questionCreateDTO = new QuestionCreateDTO();
 				questionCreateDTO.setUserId(userId);
 				data.forEach((key, value) -> {
-					if (key.equalsIgnoreCase("Subject")) {
+					if (key.equalsIgnoreCase("Course")) {
+						Optional<CourseDTO> course = courseDTOs.stream()
+								.filter(cour -> cour.getCourseName().equalsIgnoreCase(value.trim())).findAny();
+						if (course != null && course.get() != null)
+							questionCreateDTO.setCourseId(course.get().getCourseId());
+
+					} else if (key.equalsIgnoreCase("Stream")) {
+						Optional<DivisionDTO> stream = divisionDTO.stream()
+								.filter(divi -> divi.getDivisionName().equalsIgnoreCase(value.trim())).findAny();
+						if (stream != null && stream.get() != null)
+							questionCreateDTO.setDivisionId(stream.get().getDivisionId());
+					} else if (key.equalsIgnoreCase("Class")) {
+						Optional<ClassDTO> classDTO = classDTOs.stream()
+								.filter(clas -> clas.getClassName().equalsIgnoreCase(value.trim())).findAny();
+						if (classDTO != null && classDTO.get() != null)
+							questionCreateDTO.setClassId(classDTO.get().getClassId());
+					} else if (key.equalsIgnoreCase("Subject")) {
 						Optional<SubjectDTO> subject = subjectData.stream()
 								.filter(sub -> sub.getSubjectName().equalsIgnoreCase(value.trim())).findAny();
 						if (subject != null && subject.get() != null)

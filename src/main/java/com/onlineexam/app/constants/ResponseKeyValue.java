@@ -24,8 +24,10 @@ public enum ResponseKeyValue {
 	SUB_SUBJECT_MASTER_DATA_KEY("allSubSubjects"), SUB_SUBJECT_MASTER_ALL_DATA_COUNT_KEY("allSubSubjectsCount"),
 	TOPIC_MASTER_DATA_KEY("allTopics"), TOPIC_MASTER_ALL_DATA_COUNT_KEY("allTopicsCount"),
 	QUESTION_DATA_KEY("allQuestions"), QUESTION_ALL_DATA_COUNT_KEY("allQuestionsCount"),
-	QUESTION_SET_DATA_KEY("allQuestionsSet"),
-	EXAM_DATA_KEY("allExams"), EXAM_ALL_DATA_COUNT_KEY("allExamsCount"),;
+	QUESTION_SET_DATA_KEY("allQuestionsSet"), EXAM_DATA_KEY("allExams"), EXAM_ALL_DATA_COUNT_KEY("allExamsCount"),
+	ASSIGN_STUDENT_DATA_KEY("dataKey"), ASSIGN_EXAM_DATA_KEY("allAssignExam"),
+	ASSIGN_EXAM_DATA_COUNT_KEY("allAssignExamCount"), ASSIGN_QUESTIONS_FOR_STUDENTS("examQuestions"),
+	STUDENTS_EXAM_INFO("examInfo");
 
 	private String key;
 

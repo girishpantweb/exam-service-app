@@ -78,6 +78,7 @@ public class URLConstants {
 	public static final String SAVES_TOPICS = "/savetopics";
 	public static final String SAVES_QUESTIONS = "/savequestions";
 	public static final String SAVES_EXAMS = "/saveexams";
+	public static final String ASSIGN_EXAMS = "/assignexams";
 	public static final String SAVES_QUESTIONS_PAPER = "/savequestionPaper";
 	public static final String UPDATE_SUBJECTS = "/editsubjects";
 	public static final String UPDATE_SUB_SUBJECTS = "/editsubsubjects";
@@ -88,6 +89,7 @@ public class URLConstants {
 	public static final String UPDATE_TOPICS = "/edittopics";
 	public static final String UPDATE_QUESTIONS = "/editquestions";
 	public static final String UPDATE_EXAMS = "/editexams";
+	public static final String UPDATE_ASSIGN_EXAMS = "/editassignexams";
 	public static final String UPDATE_QUESTIONS_PAPER = "/editquestionPaper";
 	public static final String DELETE_SUBJECTS = "/deletesubjects";
 	public static final String DELETE_SUB_SUBJECTS = "/deletesubsubjects";
@@ -98,6 +100,7 @@ public class URLConstants {
 	public static final String DELETE_TOPICS = "/deletetopics";
 	public static final String DELETE_QUESTIONS = "/deletequestions";
 	public static final String DELETE_EXAMS = "/deleteexams";
+	public static final String DELETE_ASSIGN_EXAMS = "/deleteassignexams";
 	public static final String DELETE_QUESTIONS_PAPER = "/deletequestionPaper";
 	public static final String FETCH_ALL_SUBJECTS = "/getAllSubjects/{pageIndex}/{totalRecords}";
 	public static final String FETCH_ALL_SUB_SUBJECTS = "/getAllSubSubjects/{pageIndex}/{totalRecords}";
@@ -109,10 +112,13 @@ public class URLConstants {
 	public static final String FETCH_ALL_DIVISIONS = "/getAllDivisions/{pageIndex}/{totalRecords}";
 	public static final String FETCH_ALL_COURSES = "/getAllCourses/{pageIndex}/{totalRecords}";
 	public static final String FETCH_ALL_STUDENTS = "/getAllStudents/{pageIndex}/{totalRecords}";
+	public static final String FETCH_ALL_STUDENTS_BY_FILTERS = "/getAllStudentsByFilters";
+	public static final String FETCH_ASSIGN_EXAMS = "/getAssignExams/{pageIndex}/{totalRecords}";
 	public static final String FETCH_STUDENTS_BY_STUDENT_ID = "/getAllStudents/{pageIndex}/{totalRecords}/{studentId}";
 	public static final String FETCH_ALL_TOPICS = "/getAllTopics/{pageIndex}/{totalRecords}";
 	public static final String FETCH_ALL_QUESTIONS = "/getAllQuestions/{pageIndex}/{totalRecords}";
 	public static final String FETCH_ALL_EXAMS = "/getAllExams/{pageIndex}/{totalRecords}";
+	public static final String FETCH_EXAMS_BY_YEAR = "/getExamsByYear/{examYear}";
 	public static final String FETCH_ALL_QUESTIONS_PAPER = "/getAllQuestionPaper/{pageIndex}/{totalRecords}";
 	public static final String FETCH_QUESTION_PAPER_PAPER_ID = "/getAllQuestionPaperByPaperId/{questionPaperId}/{subjectId}";
 	public static final String FETCH_ALL_QUESTIONS_PAPER_BY_SET = "/getAllQuestionPaperBySet";
@@ -120,5 +126,8 @@ public class URLConstants {
 	public static final String FETCH_ALL_QUESTIONS_PAPER_BY_FILTER = "/getQuestionPaperByFilter/{subjectId}/{questionYear}";
 	public static final String FETCH_ALL_TOPICS_BY_FILTER = "/getAllTopicsByFilter";
 	public static final String FETCH_ALL_QUESTIONS_SET_BY_PAPER_ID = "/getdistinctSetByQuestionPaper/{questionPaperId}";
+	public static final String FETCH_STUDENT_QUESTIONS_BY_STUDENT_ID = "/getStudentQuestion/{examId}/{examYear}/{studentId}";
+	public static final String SAVE_EXAM_RESULT_OF_STUDENT = "/saveexamresult";
+	public static final String FETCH_STUDENT_EXAMS_BY_STUDENT_ID = "/getStudentExams/{studentId}";
 
 }

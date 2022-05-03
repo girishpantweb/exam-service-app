@@ -132,10 +132,9 @@ public class IQuestionServiceDaoImpl implements IQuestionServiceDao {
 			}
 		});
 	}
-	
+
 	@Override
-	public Map<Long, List<QuestionDTO>> getAllQuestionsBySubjectId(int pageIndex, int totalRecords,
-			String subjectId) {
+	public Map<Long, List<QuestionDTO>> getAllQuestionsBySubjectId(int pageIndex, int totalRecords, String subjectId) {
 		String query = "";
 		if (pageIndex == 0 && totalRecords == 0)
 			query = env.getProperty("fetchQuestionMasterQuery") + " where qm.subject_id = " + subjectId
