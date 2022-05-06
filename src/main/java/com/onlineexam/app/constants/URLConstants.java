@@ -129,5 +129,7 @@ public class URLConstants {
 	public static final String FETCH_STUDENT_QUESTIONS_BY_STUDENT_ID = "/getStudentQuestion/{examId}/{examYear}/{studentId}";
 	public static final String SAVE_EXAM_RESULT_OF_STUDENT = "/saveexamresult";
 	public static final String FETCH_STUDENT_EXAMS_BY_STUDENT_ID = "/getStudentExams/{studentId}";
+	public static final String FETCH_EXAM_RESULT_BY_STUDENT_ID = "/getStudentExamsResult/{studentId}/{examYear}";
+	public static final String FETCH_STUDENT_EXAM_YEAR = "/getStudentExamsYear/{studentId}";
 
 }

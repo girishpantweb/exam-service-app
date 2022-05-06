@@ -22,6 +22,7 @@ import com.onlineexam.app.dto.request.exam.ExamDeleteDTO;
 import com.onlineexam.app.dto.request.exam.ExamModifyDTO;
 import com.onlineexam.app.dto.request.exam.ExamResultDTO;
 import com.onlineexam.app.dto.request.exam.StudentExamInfoDTO;
+import com.onlineexam.app.dto.response.ExamResult;
 import com.onlineexam.app.dto.response.exam.AssignStudentDTO;
 import com.onlineexam.app.dto.response.exam.ExamDTO;
 import com.onlineexam.app.pojo.CustomReponseStatus;
@@ -425,6 +426,54 @@ public class ExamServiceImpl implements IExamService {
 			response.put(ResponseKeyValue.STUDENTS_EXAM_INFO.key(), dataList);
 		} catch (Exception ex) {
 			LOGGER.error("Exception Occur in getAllAssignStudentQuestions {}", ex.getMessage());
+			customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+					StatusMaster.FAILED.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+		} finally {
+			serviceResponse.setServiceResponse(response);
+		}
+		return serviceResponse;
+	}
+
+	@Override
+	public ServiceResponseDTO fetchExamResultByStudent(int studentId, String examYear) {
+		LOGGER.info("Executing  fetchExamResultByStudent() method of ExamServiceImpl");
+		LinkedHashMap<Object, Object> response = new LinkedHashMap<>();
+		ServiceResponseDTO serviceResponse = new ServiceResponseDTO();
+		CustomReponseStatus customReponseStatus = null;
+		List<ExamResult> dataList = null;
+		try {
+			dataList = examServiceDao.getStudentExamResult(studentId, examYear);
+			customReponseStatus = new CustomReponseStatus(StatusMaster.SUCCESS.getResponseCode(),
+					StatusMaster.SUCCESS.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+			response.put(ResponseKeyValue.DATA_KEY.key(), dataList);
+		} catch (Exception ex) {
+			LOGGER.error("Exception Occur in fetchExamResultByStudent {}", ex.getMessage());
+			customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
+					StatusMaster.FAILED.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+		} finally {
+			serviceResponse.setServiceResponse(response);
+		}
+		return serviceResponse;
+	}
+
+	@Override
+	public ServiceResponseDTO fetchStudentExamYears(int studentId) {
+		LOGGER.info("Executing  fetchStudentExamYears() method of ExamServiceImpl");
+		LinkedHashMap<Object, Object> response = new LinkedHashMap<>();
+		ServiceResponseDTO serviceResponse = new ServiceResponseDTO();
+		CustomReponseStatus customReponseStatus = null;
+		List<String> dataList = null;
+		try {
+			dataList = examServiceDao.getStudentExamYears(studentId);
+			customReponseStatus = new CustomReponseStatus(StatusMaster.SUCCESS.getResponseCode(),
+					StatusMaster.SUCCESS.getResponseMessage());
+			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);
+			response.put(ResponseKeyValue.DATA_KEY.key(), dataList);
+		} catch (Exception ex) {
+			LOGGER.error("Exception Occur in fetchStudentExamYears {}", ex.getMessage());
 			customReponseStatus = new CustomReponseStatus(StatusMaster.FAILED.getResponseCode(),
 					StatusMaster.FAILED.getResponseMessage());
 			response.put(ResponseKeyValue.CUSTOM_RESPONSE_KEY.key(), customReponseStatus);

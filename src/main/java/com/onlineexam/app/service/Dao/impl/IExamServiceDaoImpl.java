@@ -27,6 +27,7 @@ import com.onlineexam.app.dto.request.exam.ExamModifyDTO;
 import com.onlineexam.app.dto.request.exam.ExamResultDTO;
 import com.onlineexam.app.dto.request.exam.OptionsDTO;
 import com.onlineexam.app.dto.request.exam.StudentExamInfoDTO;
+import com.onlineexam.app.dto.response.ExamResult;
 import com.onlineexam.app.dto.response.exam.AssignStudentDTO;
 import com.onlineexam.app.dto.response.exam.ExamDTO;
 import com.onlineexam.app.dto.response.master.ClassDTO;
@@ -396,6 +397,51 @@ public class IExamServiceDaoImpl implements IExamServiceDao {
 						subjectDTO.setSubjectName(rs.getString("subject_name"));
 						studentExamInfoDTO.setSubjectDTO(subjectDTO);
 						return studentExamInfoDTO;
+					}
+				});
+	}
+
+	@Override
+	public List<ExamResult> getStudentExamResult(int studentId, String examYear) throws SQLException {
+		List<Character> alphabetic = new ArrayList<Character>();
+		char c;
+		for (c = 'A'; c <= 'Z'; c++) {
+			alphabetic.add(c);
+		}
+		StringBuilder query = new StringBuilder();
+		query.append(env.getProperty("fetchExamResultByStudent"));
+		return jdbcTemplate.query(query.toString(),
+				new Object[] { studentId, examYear, studentId, examYear, studentId, examYear, studentId },
+				new int[] { Types.BIGINT, Types.VARCHAR, Types.BIGINT, Types.VARCHAR, Types.BIGINT, Types.VARCHAR,
+						Types.BIGINT },
+				new RowMapper<ExamResult>() {
+					@Override
+					public ExamResult mapRow(ResultSet rs, int rowNum) throws SQLException {
+						ExamResult examResult = new ExamResult();
+						SubjectDTO subjectDTO = new SubjectDTO();
+						examResult.setExamId(rs.getLong("exam_id"));
+						examResult.setExamCode(rs.getString("exam_code"));
+						examResult.setCorrectAnswer(rs.getString("correctAnswer"));
+						examResult.setTotalAttemptedQuestions(rs.getString("totalAttemptedQuestions"));
+						examResult.setTotalQuestIons(rs.getString("totalQuestIons"));
+						examResult.setSetNo("" + alphabetic.get(rs.getInt("set_no") - 1));
+						subjectDTO.setSubjectId(rs.getLong("subject_id"));
+						subjectDTO.setSubjectName(rs.getString("subject_name"));
+						examResult.setSubjectDTO(subjectDTO);
+						return examResult;
+					}
+				});
+	}
+
+	@Override
+	public List<String> getStudentExamYears(int studentId) throws SQLException {
+		StringBuilder query = new StringBuilder();
+		query.append(env.getProperty("fetchStudentExamYears"));
+		return jdbcTemplate.query(query.toString(), new Object[] { studentId }, new int[] { Types.BIGINT },
+				new RowMapper<String>() {
+					@Override
+					public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+						return rs.getString("exam_year");
 					}
 				});
 	}

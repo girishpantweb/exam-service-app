@@ -110,7 +110,20 @@ public class ExamController {
 
 	@GetMapping(value = URLConstants.FETCH_STUDENT_EXAMS_BY_STUDENT_ID)
 	public ServiceResponseDTO fetchStudentExams(@PathVariable int studentId) {
-		LOGGER.info("Executing  fetchStudentAssignedQuestions() method of StudentController");
+		LOGGER.info("Executing  fetchStudentAssignedQuestions() method of ExamController");
 		return examService.getStudentExams(studentId);
 	}
+
+	@GetMapping(value = URLConstants.FETCH_EXAM_RESULT_BY_STUDENT_ID)
+	public ServiceResponseDTO fetchExamResultByStudent(@PathVariable int studentId, @PathVariable String examYear) {
+		LOGGER.info("Executing  fetchExamResultByStudent() method of ExamController");
+		return examService.fetchExamResultByStudent(studentId, examYear);
+	}
+
+	@GetMapping(value = URLConstants.FETCH_STUDENT_EXAM_YEAR)
+	public ServiceResponseDTO fetchStudentExamYears(@PathVariable int studentId) {
+		LOGGER.info("Executing  fetchStudentExamYears() method of ExamController");
+		return examService.fetchStudentExamYears(studentId);
+	}
+
 }

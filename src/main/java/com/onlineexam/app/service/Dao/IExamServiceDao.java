@@ -14,6 +14,7 @@ import com.onlineexam.app.dto.request.exam.ExamDeleteDTO;
 import com.onlineexam.app.dto.request.exam.ExamModifyDTO;
 import com.onlineexam.app.dto.request.exam.ExamResultDTO;
 import com.onlineexam.app.dto.request.exam.StudentExamInfoDTO;
+import com.onlineexam.app.dto.response.ExamResult;
 import com.onlineexam.app.dto.response.exam.AssignStudentDTO;
 import com.onlineexam.app.dto.response.exam.ExamDTO;
 
@@ -49,5 +50,9 @@ public interface IExamServiceDao {
 			throws SQLException;
 
 	List<StudentExamInfoDTO> getStudentExamsInfo(int studentId) throws SQLException;
+
+	List<ExamResult> getStudentExamResult(int studentId, String examYear) throws SQLException;
+
+	List<String> getStudentExamYears(int studentId) throws SQLException;
 
 }

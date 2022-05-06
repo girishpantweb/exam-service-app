@@ -40,4 +40,8 @@ public interface IExamService {
 
 	ServiceResponseDTO getStudentExams(int studentId);
 
+	ServiceResponseDTO fetchStudentExamYears(int studentId);
+
+	ServiceResponseDTO fetchExamResultByStudent(int studentId, String examYear);
+
 }

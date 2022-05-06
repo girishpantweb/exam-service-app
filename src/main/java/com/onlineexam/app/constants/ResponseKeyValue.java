@@ -27,7 +27,7 @@ public enum ResponseKeyValue {
 	QUESTION_SET_DATA_KEY("allQuestionsSet"), EXAM_DATA_KEY("allExams"), EXAM_ALL_DATA_COUNT_KEY("allExamsCount"),
 	ASSIGN_STUDENT_DATA_KEY("dataKey"), ASSIGN_EXAM_DATA_KEY("allAssignExam"),
 	ASSIGN_EXAM_DATA_COUNT_KEY("allAssignExamCount"), ASSIGN_QUESTIONS_FOR_STUDENTS("examQuestions"),
-	STUDENTS_EXAM_INFO("examInfo");
+	STUDENTS_EXAM_INFO("examInfo"), DATA_KEY("dataKey");
 
 	private String key;
 
