@@ -57,6 +57,7 @@ public class URLConstants {
 	public static final String MENU_DETAILS = "/menudetails";
 	public static final String MENU_SERVICE = "/menuservice";
 	public static final String STUDENT_SERVICE = "/studentservice";
+	public static final String REPORT_SERVICE = "/reportservice";
 	public static final String QUESTION_SERVICE = "/questionservice";
 	public static final String EXAM_SERVICE = "/examservice";
 	public static final String SAVES_ROLES = "/saveroles";
@@ -75,6 +76,7 @@ public class URLConstants {
 	public static final String SAVES_DIVISIONS = "/savedivisions";
 	public static final String SAVES_COURSES = "/savecourses";
 	public static final String SAVES_STUDENTS = "/savestudents";
+	public static final String DISPLAY_REPORT = "/displayreport";
 	public static final String SAVES_TOPICS = "/savetopics";
 	public static final String SAVES_QUESTIONS = "/savequestions";
 	public static final String SAVES_EXAMS = "/saveexams";
